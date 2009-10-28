@@ -23,6 +23,7 @@
         /// el contenido del método con el editor de código.
         /// </summary>
         private void InitializeComponent() {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmSplitter));
             this.lbFile = new System.Windows.Forms.Label();
             this.txtFile = new System.Windows.Forms.TextBox();
             this.cmdSelectFile = new System.Windows.Forms.Button();
@@ -236,6 +237,7 @@
             this.Controls.Add(this.lbFile);
             this.Controls.Add(this.lbInfo);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "FrmSplitter";
             this.Text = "File Splitter";
