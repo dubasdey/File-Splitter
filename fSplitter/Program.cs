@@ -17,19 +17,42 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using System.IO;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.Threading;
+using System.Runtime.InteropServices;
 
 namespace FileSplitter {
     static class Program {
-        
+
+        [DllImport("user32.dll")]
+        public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
+
+        [DllImport("user32.dll")]
+        static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+
         private static String lastFile = "";
 
         private static void printHelp() {
             Console.WriteLine("Usage:");
             Console.WriteLine("fsplit -split <size> <unit> <filePath>");
-            Console.WriteLine("\t\tsize\t Size of parts");
-            Console.WriteLine("\t\tunit\t unit of size 'b' 'kb 'mb'");
-            Console.WriteLine("\t\filePath\t Path of file to be splitted");
+            Console.WriteLine("\t\t size\t\t Size of parts");
+            Console.WriteLine("\t\t unit\t\t unit of size 'b' 'kb 'mb'");
+            Console.WriteLine("\t\t filePath\t Path of file to be splitted");
         }
+
+
+        private static void setConsoleWindowVisibility(bool visible) {
+            IntPtr hWnd = FindWindow(null, Console.Title);
+            if (hWnd != IntPtr.Zero) {
+                if (!visible)
+                    //Hide the window                    
+                    ShowWindow(hWnd, 0); // 0 = SW_HIDE                
+                else
+                    //Show window again                    
+                    ShowWindow(hWnd, 1); //1 = SW_SHOWNORMA           
+            }
+        }
+
 
         /// <summary>
         /// Punto de entrada principal para la aplicación.
@@ -41,11 +64,14 @@ namespace FileSplitter {
             // 1 - split size
             // 2 - split units
             // 3 - file
+            Console.Title = Application.ProductName +  Application.ProductVersion + " Console Window";
+
             if (args != null && args.Length > 1) {
 
                 if (args[0].Equals("-split")) {
                     if (args.Length < 4) {
                         Console.WriteLine("Missing parameter");
+                       
                         printHelp();
 
                     } else {
@@ -97,7 +123,7 @@ namespace FileSplitter {
                 }
 
             } else {
-                
+                setConsoleWindowVisibility(false);
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
                 Application.Run(new FrmSplitter());
