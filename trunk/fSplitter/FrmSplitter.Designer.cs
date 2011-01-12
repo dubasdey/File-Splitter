@@ -102,7 +102,8 @@
             this.cmbUnits.Items.AddRange(new object[] {
             "b",
             "Kb",
-            "Mb"});
+            "Mb",
+            "Gb"});
             this.cmbUnits.Location = new System.Drawing.Point(184, 16);
             this.cmbUnits.Name = "cmbUnits";
             this.cmbUnits.Size = new System.Drawing.Size(56, 21);
@@ -156,7 +157,7 @@
             this.panelSpitting.Controls.Add(this.progressBarFileSize);
             this.panelSpitting.Controls.Add(this.progressBarFiles);
             this.panelSpitting.Controls.Add(this.lbSplitInfo);
-            this.panelSpitting.Location = new System.Drawing.Point(15, 84);
+            this.panelSpitting.Location = new System.Drawing.Point(12, 84);
             this.panelSpitting.Name = "panelSpitting";
             this.panelSpitting.Size = new System.Drawing.Size(315, 80);
             this.panelSpitting.TabIndex = 5;
@@ -228,7 +229,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(337, 169);
+            this.ClientSize = new System.Drawing.Size(341, 177);
             this.Controls.Add(this.panelSpitting);
             this.Controls.Add(this.cmdStart);
             this.Controls.Add(this.grpSplitSize);
@@ -239,6 +240,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "FrmSplitter";
             this.Text = "File Splitter";
             this.grpSplitSize.ResumeLayout(false);
