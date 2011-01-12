@@ -23,7 +23,9 @@ using System.Runtime.InteropServices;
 
 namespace FileSplitter {
     static class Program {
-
+		
+		
+		
         [DllImport("user32.dll")]
         public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
 
@@ -36,22 +38,24 @@ namespace FileSplitter {
             Console.WriteLine("Usage:");
             Console.WriteLine("fsplit -split <size> <unit> <filePath>");
             Console.WriteLine("\t\t size\t\t Size of parts");
-            Console.WriteLine("\t\t unit\t\t unit of size 'b' 'kb 'mb'");
-            Console.WriteLine("\t\t filePath\t Path of file to be splitted");
+            Console.WriteLine("\t\t unit\t\t unit of size 'b' 'kb 'mb' 'gb'");
+            Console.WriteLine("\t\t filePath\t Path of the file to be split");
         }
 
 
         private static void setConsoleWindowVisibility(bool visible) {
             IntPtr hWnd = FindWindow(null, Console.Title);
             if (hWnd != IntPtr.Zero) {
-                if (!visible)
+                if (!visible) {
                     //Hide the window                    
                     ShowWindow(hWnd, 0); // 0 = SW_HIDE                
-                else
+                } else{
                     //Show window again                    
-                    ShowWindow(hWnd, 1); //1 = SW_SHOWNORMA           
+                    ShowWindow(hWnd, 1); //1 = SW_SHOWNORMA       
+                }
             }
         }
+
 
 
         /// <summary>
@@ -59,67 +63,76 @@ namespace FileSplitter {
         /// </summary>
         [STAThread]
         static void Main(String[] args) {
+
             // args:
             // 0 - action
             // 1 - split size
             // 2 - split units
             // 3 - file
-            Console.Title = Application.ProductName +  Application.ProductVersion + " Console Window";
+            Console.Title = Application.ProductName +  " " + Application.ProductVersion + " Console Window";
 
-            if (args != null && args.Length > 1) {
+             if (args != null && args.Length > 1) {
 
                 if (args[0].Equals("-split")) {
                     if (args.Length < 4) {
-                        Console.WriteLine("Missing parameter");
-                       
+                        Console.WriteLine("Missing parameter");                      
                         printHelp();
-
+                        Environment.Exit(1);  // return an ErrorLevel in case it is processed in a Batch file
                     } else {
+
+                       
                         // check size
-                        decimal size = 0;
+                        Int32 size = 0;
                         try {
-                            size = Convert.ToDecimal(args[1]);
+                            size = Convert.ToInt32(args[1]);
                         } catch {
                             Console.WriteLine("Invalid size");
                             printHelp();
-                            return;
+                            Environment.Exit(1);
                         }
 
                         // check units
-                        Int32 units = 0;
+                        
                         if (args[2].ToLower() == "b"){
-                            units = 0;
+                            // nothing to do
                         } else if (args[2].ToLower() == "kb") {
-                            units = 1;
+                            size = size * 1024;
                         } else if (args[2].ToLower() == "mb") {
-                            units = 2;
+                            size = size * 1024 * 1024;
+                        }else if (args[2].ToLower() == "gb"){
+                            size = size * 1024 * 1024 * 1024;
                         } else {
                             Console.WriteLine("Invalid size unit");
                             printHelp();
-                            return;
+                            Environment.Exit(1);
                         }
+
+
 
                         // check file exists
                         String fileName = args[3];
                         if (File.Exists(fileName)) {
                             FileSplitter fs = new FileSplitter();
-                            fs.splitStart += new FileSplitter.splitStartHandler(fs_splitStart);
-                            fs.splitEnd += new FileSplitter.splitEndHandler(fs_splitEnd);
-                            fs.splitProcess += new FileSplitter.splitProcessHandler(fs_splitProcess);
+                            fs.start += new FileSplitter.StartHandler(fs_splitStart);
+                            fs.finish += new FileSplitter.FinishHandler(fs_splitEnd);
+                            fs.processing += new FileSplitter.ProcessHandler(fs_splitProcess);
+                            fs.message += new FileSplitter.MessageHandler(fs_message);
                             fs.FileName = fileName;
-                            fs.setPartSize(size,units);
+                            fs.PartSize = size;
+
                             fs.doSplit();
-                            
+                            Environment.Exit(1);       // return an ErrorLevel indicating successful launch
                         } else {
-                            Console.WriteLine("File not exists");
+                            Console.WriteLine("File does not exist");
                             printHelp();
-                            return;
+                            Environment.Exit(1);
                         }
                     }
 
                 } else {
                     Console.WriteLine("Unrecognized Command");
                     printHelp();
+                    Environment.Exit(1);
                 }
 
             } else {
@@ -127,14 +140,23 @@ namespace FileSplitter {
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
                 Application.Run(new FrmSplitter());
+                Environment.Exit(1);     // although there's not much point - the console window is no longer visible.  Does it need to be closed?
             }
         }
 
+
+        static void fs_message(object server, MessageArgs args){
+            Console.WriteLine(args.Type.ToString() + "\t"+ args.Message);
+        }
+
+        static void fs_splitStart(){
+            Console.WriteLine("Starting splitting operation");
+        }
         
-        static void fs_splitProcess(object sender, SplitProcessArgs args) {
+        static void fs_splitProcess(object sender, ProcessingArgs args) {
             if (lastFile != args.FileName) {
                 lastFile = args.FileName;
-                Console.WriteLine("Writting " + lastFile);
+                Console.WriteLine("Writing " + lastFile);
             } 
             
         }
@@ -143,9 +165,6 @@ namespace FileSplitter {
             Console.WriteLine("Done!");
         }
 
-        static void fs_splitStart() {
-            Console.WriteLine("Starting splitting operation");
-        }
-    }
+     }
 }
 

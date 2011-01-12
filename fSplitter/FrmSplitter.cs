@@ -42,14 +42,26 @@ namespace FileSplitter {
 
             // splitter object
             fileSplitter = new FileSplitter();
-            fileSplitter.splitStart += new FileSplitter.splitStartHandler(fileSplitter_splitStart);
-            fileSplitter.splitEnd += new FileSplitter.splitEndHandler(fileSplitter_splitEnd);
-            fileSplitter.splitProcess += new FileSplitter.splitProcessHandler(fileSplitter_splitProcess); 
-            
-            // 0 bytes 1 kbytes  2 Mbytes
+            fileSplitter.start += new FileSplitter.StartHandler(fileSplitter_splitStart);
+            fileSplitter.finish += new FileSplitter.FinishHandler(fileSplitter_splitEnd);
+            fileSplitter.processing += new FileSplitter.ProcessHandler(fileSplitter_splitProcess);
+            fileSplitter.message += new FileSplitter.MessageHandler(fileSplitter_message);
+
+            // 0 bytes 1 kbytes  2 Mbytes 3 Gb
             cmbUnits.SelectedIndex = 2;
             numSize.Value = 10;
-            fileSplitter.setPartSize(10, 2); 
+            fileSplitter.PartSize = 10 * 1024 * 1024 ; // 10 Mb
+        }
+
+        void fileSplitter_message(object server, MessageArgs args)
+        {
+            MessageBoxIcon icon = MessageBoxIcon.Information;
+            switch (args.Type) {
+                case MESSAGETYPE.ERROR: icon = MessageBoxIcon.Error; break;
+                case MESSAGETYPE.WARN: icon = MessageBoxIcon.Warning; break;
+                case MESSAGETYPE.FATAL: icon = MessageBoxIcon.Hand; break;
+            }
+            MessageBox.Show(args.Message, "", MessageBoxButtons.OK, icon);
         }
 
         /// <summary>
@@ -57,15 +69,11 @@ namespace FileSplitter {
         /// </summary>
         /// <param name="sender">spliter object</param>
         /// <param name="args">Paramaters of actual split</param>
-        void fileSplitter_splitProcess(object sender, SplitProcessArgs args) {
-            progressBarFiles.Maximum = 100;
-            progressBarFiles.Step = 1;
-            progressBarFileSize.Maximum = 100;
-            progressBarFileSize.Step = 1;
-
+        void fileSplitter_splitProcess(object sender, ProcessingArgs args) {
             lbSplitInfo.Text = String.Format(lbSplitInfo.Tag.ToString(), args.FileName);
+
             int percPart = Convert.ToInt32((args.Part * 100) / args.Parts);
-            int percSize = Convert.ToInt32((args.PartSizeWritted * 100) / args.PartSize);
+            int percSize = Convert.ToInt32((args.PartSizeWritten * 100) / args.PartSize);
 
             if (percPart < progressBarFiles.Maximum) {
                 progressBarFiles.Value = percPart;
@@ -121,7 +129,11 @@ namespace FileSplitter {
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void controlValueChangedEvent(object sender, EventArgs e) {
-            fileSplitter.setPartSize(numSize.Value, cmbUnits.SelectedIndex);   
+            Int64 factor =Convert.ToInt64 (Math.Pow(1024,Convert.ToDouble(cmbUnits.SelectedIndex)));
+            if (factor == 0) {
+                factor = 1;
+            }
+            fileSplitter.PartSize =Convert.ToInt64( numSize.Value * factor);   
             lbEstimatedParts.Text = String.Format(lbEstimatedParts.Tag.ToString(), fileSplitter.Parts);
         }
 
