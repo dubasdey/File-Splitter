@@ -175,12 +175,12 @@ namespace FileSplitter {
                 
                 // Check Drive Format Limitations
                 if (driveInfo.DriveFormat == "FAT16") { // 2gb
-                    if (this.PartSize >= 2 * 1073741824L) {
+                    if (this.PartSize > 2 * 1073741824L) {
                         onMessage("FAT16 File systems does not allow more than 2 Gb for each file.", MESSAGETYPE.ERROR);
                         return;
                     }
                 }else  if (driveInfo.DriveFormat == "FAT32") {  // 4gb
-                    if (this.PartSize >= 4 * 1073741824L) {
+                    if (this.PartSize > 4 * 1073741824L) {
                         onMessage("FAT32 File systems does not allow more than 4 Gb for each file.", MESSAGETYPE.ERROR);
                         return;
                     }
@@ -265,7 +265,7 @@ namespace FileSplitter {
 		                        // else write all in the new file
 		                        if (pendingToWrite>0 && pendingToWrite<=bytesInBuffer){
 		                        	//stmWriter.Write(buffer,bytesInBuffer - pendingToWrite, bytesInBuffer);
-		                        	stmWriter.Write(buffer,pendingToWrite, bytesInBuffer);
+		                        	stmWriter.Write(buffer,pendingToWrite, (bytesInBuffer-pendingToWrite));
 		                        }else if (pendingToWrite==0){
 		                        	stmWriter.Write(buffer,0, bytesInBuffer);
 		                        }
@@ -287,7 +287,7 @@ namespace FileSplitter {
                     onMessage("The total size of all the output file parts is not equal to the original data file size !", MESSAGETYPE.ERROR);
                 }
 
-          /*  } catch (Exception ex) {
+           /* } catch (Exception ex) {
                 onMessage("Error creating files." + ex.Message + "\n" + ex.Source, MESSAGETYPE.FATAL);*/
             } finally {
                 onFinish();
