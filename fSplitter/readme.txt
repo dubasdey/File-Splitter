@@ -1,11 +1,11 @@
 ﻿Information
 -----------------------------------------------------------------------------------------
 
-A Widows and Console based utility to split large files into smaller parts.
+A Windows and Console based utility to split large files into smaller parts.
 
 Both the Windows and console versions share the same core library of code.
-It does not use the Window to gather all the parameters and then pass them to the
-batch program, which I would have preferred.
+Both versions are independent of each other (ie the Window version does not to gather all the
+parameters and then pass them to the batch program).
 
 The split files retain the original extension.  The current partnumber
 and the total partnumbers are inserted in the format "_XX(YY)", 
@@ -31,7 +31,7 @@ fSplit -split <size> <unit> <filePath>
 		filePath	Path of file to be split ex: "C:\console\console.log"
 
 Example: fSplit -split 10230 kb c:\console\console.log   
-Example: fSplit -split 512 mb "c:\console\a file name with spaces.log"	(note: quotes are only needed if the file name contains spaces)
+Example: fSplit -split 512 mb "c:\console\a file name with spaces.log"	(note: quotes are only needed if the filepath contains spaces)
 
 Note 1: you can't use commas as delimiters
 Note 2: if you call the program from the console without parameters, it invokes the Windows version.

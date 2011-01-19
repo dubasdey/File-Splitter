@@ -1,27 +1,36 @@
-﻿FileSplitter (FSplit) has a console interface, so it can be used with batch programs.
+﻿FileSplitter (FSplit)'s biggest advantage is that it has a console interface, so it can be used with batch programs.
+
 This was why I originally found the application to be useful.  I had a VBA script that processed text files, but it could not manage
 files that were bigger than 2GB - a 32 bit limit.  Some of the files were in the hundreds of Gigabytes.
 FSplit allows the VBA script to process the files in manageable chunks.  There are many other 32 bit applications with this problem, so
-running FSplit as a console application should be useful to others.  These examples of batch files may help.
+running FSplit as a console application should be useful to others.  Whereas most Windows based file splitters will split one file,
+the console interface allows us to split multiple files - but you have to know how to write batch files, which can be daunting for the 
+first timer.  These examples of batch files may help.
 
-FSplit splits a file like VTS_01_1.VOB to multiple parts, and each part is in the format VTS_01_1_23(66).VOB.  This would be part 23 of a 
-total 66 parts.  The important point for these batch files is that the complete file name is made up of the "file name minus the 
-extension" (VTS_01_1), which I call FileBase, an underscore "_", the part number (23) and the total (66) followed by the extension.
+You will have to edit the batch files to suit your needs.  The following explanations should help. 
+
+Batch files are usually run from the command console (Start/Run/Cmd.exe).
+
+These batch files rely on the format of the file names.  FSplit splits a file like VTS_01_1.VOB to multiple parts, and each part has a 
+name like VTS_01_1_23(66).VOB.  This would be part 23 of a total 66 parts.  The important point for these batch files is that the 
+complete file name is made up of the "file name minus the extension" (VTS_01_1), which I will call FileBase, an underscore "_", the part 
+number (23) and the total (66) followed by the extension.  We use the new underscore to differentiate between the original file and its parts.
 
 ---------------
 
-The following batch file splits VTS_01_1.VOB into parts that are 12345.67 kb long
+The following batch file splits VTS_01_1.VOB into parts that are 12345 kb long
 
 Setting a temporary environment variable called FileBase isn't really necessary, but it is there to show that we can distinguish between 
 the original file and its parts using the _ that follows the base part of the name.
 
 If the wrong parameters are passed to the program it will not initiate correctly. The program will display the parameters needed, and 
-set the returned ErrorLevel to 1 so the problem can be identified in Batch files
+set the returned ErrorLevel to 1 so the problem can be identified in Batch files.
 
-This batch file only echo's the name of the new parts, but you could CALL another batch file to process the new parts instead.
+This batch file only splits the file to 12345 kb parts then echo's the name of the new parts, but you could CALL another batch file to process 
+the new parts instead.
 
 @set FileBase=VTS_01_1
-c:\\fsplit -split 12345.67 kb "c:\test\%FileBase%.VOB" 
+c:\\fsplit -split 12345 kb "c:\test\%FileBase%.VOB" 
 if errorlevel 1 (@Echo there was an error with the parameters provided to the program) else ( 
         for %%a in (c:\test\%FileBase%_*.VOB) do @echo %%a)
 ) 
@@ -30,28 +39,34 @@ if errorlevel 1 (@Echo there was an error with the parameters provided to the pr
 Moving up in complexity, we can use some Command Extensions to check for the file size, and parse the program name so we get the equivalent 
 of FileBase.  If it does not work, ensure that Command Extensions have to be enabled (try Google).
 
-The following one line batch program identifies files that are greater than a particular size.  The batch program just echoes the filename, 
-but could do something more useful - like CALLing another batch program to split the file and process the parts.
+The following one line batch program identifies files that are greater than a particular size - in this case 512 MB (536,870,912 bytes).
+The batch program just echoes the filename, but could do something more useful - like CALLing another batch program to split the file and process 
+the parts.
 
 The leading @ tells the batch processor to not echo the commands to the console.  It's neater, but harder to debug.  You can remove them 
 if you want.
                                                       
-@for %%J in (*.*) do @if %%~zJ gtr 18000000 @echo %%J 
+@for %%J in (*.*) do @if %%~zJ gtr 536870912 @echo %%J 
 
 -------------
 
 We can combine these to a more useful solution that calls a batch file called DivideAndConquer, passing the **fully qualified** large filename 
 as a parameter.  FSplit needs the full filename, including the drive and directory.  You could change the (*.*) to be more selective.  Also, it's 
-unlikely that you will select files using the same value I did.  Change it to something useful to you.
+unlikely that you will select files using the same size value that I did.  Change it to something useful to you.
 
-@for %%J in (*.*) do @if %%~zJ gtr 18000000 @call DivideAndConquer.bat %%~fJ 
+@for %%J in (*.*) do @if %%~zJ gtr 536870912 @call DivideAndConquer.bat %%~fJ 
 
 where DivideAndConquer.Bat contains
 
-c:\\fsplit -split 12345.67 kb %1 
+c:\\fsplit -split 512 mb %1 
 if errorlevel 1 (@Echo there was an error with the parameters provided to the program) else ( 
         for /f "tokens=1,2 delims=." %%a in ('dir /b %1) do (for %%y in (%%a_*.%%b) do Call Conquer.bat %%y)
 ) 
 The last line parses the file name to two tokens, delimited by a ".".  It then selects all parts to the file created by FSplit (and excludes 
 the original file, which does not have a _ after the FileBase) and calls a batch file called Conquer.bat to do the processing you want.  
 Note:  This will fail if your filename has more than one "." in it.
+
+Hope this helps.
+
+James from Canberra, Australia.
+January 2011.
