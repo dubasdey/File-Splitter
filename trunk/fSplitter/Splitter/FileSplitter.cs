@@ -266,8 +266,10 @@ namespace FileSplitter {
 		                        if (pendingToWrite>0 && pendingToWrite<=bytesInBuffer){
 		                        	//stmWriter.Write(buffer,bytesInBuffer - pendingToWrite, bytesInBuffer);
 		                        	stmWriter.Write(buffer,pendingToWrite, (bytesInBuffer-pendingToWrite));
+		                        	 bytesInPart += (bytesInBuffer-pendingToWrite);
 		                        }else if (pendingToWrite==0){
 		                        	stmWriter.Write(buffer,0, bytesInBuffer);
+		                        	 bytesInPart += bytesInBuffer;
 		                        }
 							}
 						}
