@@ -24,7 +24,8 @@ using System.Runtime.InteropServices;
 namespace FileSplitter {
     static class Program {
 		
-		
+		private static Int32 EXIT_CODE_OK= 0;
+		private static Int32 EXIT_CODE_FAIL= 1;
 		
         [DllImport("user32.dll")]
         public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
@@ -57,6 +58,7 @@ namespace FileSplitter {
         }
 
 
+		
 
         /// <summary>
         /// Punto de entrada principal para la aplicación.
@@ -88,7 +90,7 @@ namespace FileSplitter {
                         } catch {
                             Console.WriteLine("Invalid size");
                             printHelp();
-                            Environment.Exit(1);
+                            Environment.Exit(EXIT_CODE_FAIL);
                         }
 
                         // check units
@@ -104,7 +106,7 @@ namespace FileSplitter {
                         } else {
                             Console.WriteLine("Invalid size unit");
                             printHelp();
-                            Environment.Exit(1);
+                            Environment.Exit(EXIT_CODE_FAIL);
                         }
 
 
@@ -121,18 +123,18 @@ namespace FileSplitter {
                             fs.PartSize = size;
 
                             fs.doSplit();
-                            Environment.Exit(1);       // return an ErrorLevel indicating successful launch
+                            Environment.Exit(EXIT_CODE_OK);       // return an ErrorLevel indicating successful launch
                         } else {
                             Console.WriteLine("File does not exist");
                             printHelp();
-                            Environment.Exit(1);
+                            Environment.Exit(EXIT_CODE_FAIL);
                         }
                     }
 
                 } else {
                     Console.WriteLine("Unrecognized Command");
                     printHelp();
-                    Environment.Exit(1);
+                    Environment.Exit(EXIT_CODE_FAIL);
                 }
 
             } else {
@@ -140,8 +142,9 @@ namespace FileSplitter {
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
                 Application.Run(new FrmSplitter());
-                Environment.Exit(1);     // although there's not much point - the console window is no longer visible.  Does it need to be closed?
+                Environment.Exit(EXIT_CODE_OK);     // although there's not much point - the console window is no longer visible.  Does it need to be closed?
             }
+            
         }
 
 
