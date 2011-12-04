@@ -214,7 +214,8 @@ namespace FileSplitter {
                 // File Pattern
                 Int64 actualFileNumber = 1;
                 String zeros = new String('0', this.Parts.ToString().Length); // Padding
-                String fileNamePattern = fileNameInfo.DirectoryName + Path.GetFileNameWithoutExtension(this.FileName) + "_{0:" + zeros + "}({1:" + zeros + "})" + fileNameInfo.Extension;
+                String fileNamePattern =Path.GetFileNameWithoutExtension(this.FileName) + "_{0:" + zeros + "}({1:" + zeros + "})" + fileNameInfo.Extension;
+                fileNamePattern = Path.Combine(fileNameInfo.DirectoryName, fileNamePattern);
                 
 				String actualFileName = String.Format(fileNamePattern,actualFileNumber, this.Parts);
                 
