@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ACTUAL_FILE_PROGRESS" xml:space="preserve">
     <value>Actual file progress</value>
@@ -148,22 +148,22 @@
     <value>All Files|*.*</value>
   </data>
   <data name="NUMBER_OF_LINES" xml:space="preserve">
-    <value>Number of rows</value>
+    <value>Number of lines</value>
   </data>
   <data name="SPLINT_INFO_PARTS_DEF" xml:space="preserve">
     <value>0 parts of</value>
-  </data>
-  <data name="SPLITSIZE" xml:space="preserve">
-    <value>Split Size</value>
-  </data>
-  <data name="SPLITTING_FILE" xml:space="preserve">
-    <value>Splitting file {0}</value>
   </data>
   <data name="SPLIT_INFO" xml:space="preserve">
     <value>First select a file to split. Next select the part size and  push on "Start" to start splitting the file in smaller parts</value>
   </data>
   <data name="SPLIT_INFO_PARTS" xml:space="preserve">
     <value>{0} parts of</value>
+  </data>
+  <data name="SPLITSIZE" xml:space="preserve">
+    <value>Split Size</value>
+  </data>
+  <data name="SPLITTING_FILE" xml:space="preserve">
+    <value>Splitting file {0}</value>
   </data>
   <data name="START" xml:space="preserve">
     <value>Start</value>
