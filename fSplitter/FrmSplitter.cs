@@ -46,15 +46,13 @@ namespace FileSplitter {
             fileSplitter.finish += new FileSplitter.FinishHandler(fileSplitter_splitEnd);
             fileSplitter.processing += new FileSplitter.ProcessHandler(fileSplitter_splitProcess);
             fileSplitter.message += new FileSplitter.MessageHandler(fileSplitter_message);
-
-            // 0 bytes 1 kbytes  2 Mbytes 3 Gb
-            cmbUnits.SelectedIndex = 2;
-            numSize.Value = 10;
-            fileSplitter.PartSize = 10 * 1024 * 1024 ; // 10 Mb
+            cmbUnits.SelectedIndex = Properties.Settings.Default.typeIndex;
+            numSize.Value = Properties.Settings.Default.itemsNumber;
+            fileSplitter.OperationMode = cmbUnits.SelectedIndex < 4 ? OPERATION_MODE.SIZE : OPERATION_MODE.LINES;
+            fileSplitter.PartSize = FileSplitter.unitConverter((Int64)numSize.Value, cmbUnits.SelectedIndex) ; 
         }
 
-        void fileSplitter_message(object server, MessageArgs args)
-        {
+        void fileSplitter_message(object server, MessageArgs args) {
             MessageBoxIcon icon = MessageBoxIcon.Information;
             switch (args.Type) {
                 case MESSAGETYPE.ERROR: icon = MessageBoxIcon.Error; break;
@@ -72,15 +70,19 @@ namespace FileSplitter {
         void fileSplitter_splitProcess(object sender, ProcessingArgs args) {
             lbSplitInfo.Text = String.Format(lbSplitInfo.Tag.ToString(), args.FileName);
 
-            int percPart = Convert.ToInt32((args.Part * 100) / args.Parts);
-            int percSize = Convert.ToInt32((args.PartSizeWritten * 100) / args.PartSize);
-
-            if (percPart < progressBarFiles.Maximum) {
-                progressBarFiles.Value = percPart;
+            if (fileSplitter.OperationMode == OPERATION_MODE.SIZE) {
+                progressBarFiles.Style = ProgressBarStyle.Continuous;
+                int percPart = Convert.ToInt32((args.Part * 100) / args.Parts);
+                if (percPart < progressBarFiles.Maximum) {
+                    progressBarFiles.Value = percPart;
+                } else {
+                    progressBarFiles.Value = progressBarFiles.Maximum;
+                }
             } else {
-                progressBarFiles.Value = progressBarFiles.Maximum;
+                progressBarFiles.Style = ProgressBarStyle.Marquee;
             }
 
+            int percSize = Convert.ToInt32((args.PartSizeWritten * 100) / args.PartSize);
             if (percSize < progressBarFileSize.Maximum) {
                 progressBarFileSize.Value = percSize;
             }else{
@@ -118,7 +120,11 @@ namespace FileSplitter {
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
                 cmdStart.Enabled = true;
                 fileSplitter.FileName =  this.txtFile.Text = openFileDialog.FileName;
-                lbEstimatedParts.Text = String.Format(lbEstimatedParts.Tag.ToString(), fileSplitter.Parts);
+                if (fileSplitter.OperationMode == OPERATION_MODE.SIZE) {
+                    lbEstimatedParts.Text = String.Format(lbEstimatedParts.Tag.ToString(), fileSplitter.Parts);
+                } else {
+                    lbEstimatedParts.Text = "Number of lines";
+                }
             }
         }
 
@@ -129,12 +135,15 @@ namespace FileSplitter {
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void controlValueChangedEvent(object sender, EventArgs e) {
-            Int64 factor =Convert.ToInt64 (Math.Pow(1024,Convert.ToDouble(cmbUnits.SelectedIndex)));
-            if (factor == 0) {
-                factor = 1;
+            updatePreferences();
+            fileSplitter.OperationMode = cmbUnits.SelectedIndex < 4 ? OPERATION_MODE.SIZE : OPERATION_MODE.LINES;
+            if (fileSplitter.OperationMode == OPERATION_MODE.SIZE) {
+                fileSplitter.PartSize = FileSplitter.unitConverter((Int64) numSize.Value, cmbUnits.SelectedIndex);
+                lbEstimatedParts.Text = String.Format(lbEstimatedParts.Tag.ToString(), fileSplitter.Parts);
+            } else {
+                fileSplitter.PartSize =(Int64) numSize.Value;
+                lbEstimatedParts.Text = "Number of lines";
             }
-            fileSplitter.PartSize =Convert.ToInt64( numSize.Value * factor);   
-            lbEstimatedParts.Text = String.Format(lbEstimatedParts.Tag.ToString(), fileSplitter.Parts);
         }
 
         /// <summary>
@@ -143,7 +152,14 @@ namespace FileSplitter {
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void lbStart_Click(object sender, EventArgs e) {
+            updatePreferences();
             fileSplitter.doSplit();
+        }
+
+        private void updatePreferences() {
+            Properties.Settings.Default.typeIndex = cmbUnits.SelectedIndex;
+            Properties.Settings.Default.itemsNumber = (Int32)numSize.Value;
+            Properties.Settings.Default.Save();
         }
     }
 }

@@ -42,8 +42,7 @@ namespace FileSplitter {
             Console.WriteLine("\t\t unit\t\t unit of size 'b' 'kb 'mb' 'gb'");
             Console.WriteLine("\t\t filePath\t Path of the file to be split");
         }
-
-
+   
         private static void setConsoleWindowVisibility(bool visible) {
             IntPtr hWnd = FindWindow(null, Console.Title);
             if (hWnd != IntPtr.Zero) {
@@ -56,9 +55,6 @@ namespace FileSplitter {
                 }
             }
         }
-
-
-		
 
         /// <summary>
         /// Punto de entrada principal para la aplicación.
@@ -77,16 +73,17 @@ namespace FileSplitter {
 
                 if (args[0].Equals("-split")) {
                     if (args.Length < 4) {
-                        Console.WriteLine("Missing parameter");                      
+                        Console.WriteLine("Missing parameter");
                         printHelp();
                         Environment.Exit(1);  // return an ErrorLevel in case it is processed in a Batch file
                     } else {
 
-                       
+                        OPERATION_MODE mode = OPERATION_MODE.SIZE;
+
                         // check size
-                        Int32 size = 0;
+                        Int64 size = 0;
                         try {
-                            size = Convert.ToInt32(args[1]);
+                            size = Convert.ToInt64(args[1]);
                         } catch {
                             Console.WriteLine("Invalid size");
                             printHelp();
@@ -94,23 +91,26 @@ namespace FileSplitter {
                         }
 
                         // check units
-                        
-                        if (args[2].ToLower() == "b"){
+                        Int32 sizeOrder = 0;
+                        if (args[2].ToLower() == "b") {
                             // nothing to do
                         } else if (args[2].ToLower() == "kb") {
-                            size = size * 1024;
+                            sizeOrder = 1;
                         } else if (args[2].ToLower() == "mb") {
-                            size = size * 1024 * 1024;
-                        }else if (args[2].ToLower() == "gb"){
-                            size = size * 1024 * 1024 * 1024;
+                            sizeOrder =2;
+                        } else if (args[2].ToLower() == "gb") {
+                            sizeOrder = 3;
+                        } else if (args[2].ToLower() == "l") {
+                            sizeOrder = 0;
+                            mode = OPERATION_MODE.LINES;
                         } else {
                             Console.WriteLine("Invalid size unit");
                             printHelp();
                             Environment.Exit(EXIT_CODE_FAIL);
                         }
 
-
-
+                        size = FileSplitter.unitConverter(size, sizeOrder);
+                            
                         // check file exists
                         String fileName = args[3];
                         if (File.Exists(fileName)) {
@@ -121,7 +121,7 @@ namespace FileSplitter {
                             fs.message += new FileSplitter.MessageHandler(fs_message);
                             fs.FileName = fileName;
                             fs.PartSize = size;
-
+                            fs.OperationMode = mode;
                             fs.doSplit();
                             Environment.Exit(EXIT_CODE_OK);       // return an ErrorLevel indicating successful launch
                         } else {
