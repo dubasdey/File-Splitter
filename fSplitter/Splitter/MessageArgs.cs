@@ -16,17 +16,13 @@ using System;
 
 namespace FileSplitter {
 	
-	/// <summary>
-	/// Types of message to be used in Message Args
-	/// </summary>
-    internal enum MESSAGETYPE {
-        INFO,
-        WARN,
-        ERROR,
-        FATAL
+    internal enum MESSAGE {
+        ERROR_MINIMUN_PART_SIZE,
+        ERROR_OPENING_FILE,
+        ERROR_TOTALSIZE_NOTEQUALS,
+        ERROR_NO_SPACE_TO_SPLIT,
+        ERROR_FILESYSTEM_NOTALLOW_SIZE
     }
-	
-    
 
     /// <summary>
     /// Arguments for Split message
@@ -36,21 +32,18 @@ namespace FileSplitter {
     	/// <summary>
     	/// Message to show
     	/// </summary>
-        public String Message { get; set; }
+        public MESSAGE Message { get; set; }
         
-        /// <summary>
-        /// Type of message
-        /// </summary>
-        public MESSAGETYPE Type { get; set; }
+        public Object[] Parameters { get; set; }
 
         /// <summary>
         /// Constructor for the message
         /// </summary>
         /// <param name="message"></param>
         /// <param name="type"></param>
-        public MessageArgs(String message, MESSAGETYPE type) {
+        public MessageArgs(MESSAGE message, Object[] parameters) {
             this.Message = message;
-            this.Type = type;
+            this.Parameters = parameters;
         }
     }
 

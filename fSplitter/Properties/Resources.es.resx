@@ -112,63 +112,63 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ACTUAL_FILE_PROGRESS" xml:space="preserve">
-    <value>Actual file progress</value>
+    <value>Archivo actual</value>
   </data>
   <data name="ALL_FILES_PROGRESS" xml:space="preserve">
-    <value>All files progress</value>
+    <value>Todos los archivos</value>
   </data>
   <data name="CMB_LINES" xml:space="preserve">
-    <value>Lines</value>
+    <value>Lineas</value>
   </data>
   <data name="ERROR_FILESYSTEM_NOTALLOW_SIZE" xml:space="preserve">
-    <value>{0} File systems does not allow more than {1} {2} for each file.</value>
+    <value>El sistema de archivos {0} no soporta archivos de mas de {1} {2}.</value>
   </data>
   <data name="ERROR_MINIMUN_PART_SIZE" xml:space="preserve">
-    <value>Minimun part size must be {0} bytes</value>
+    <value>El tamaño mínimo de una pare debe ser de {0} bytes</value>
   </data>
   <data name="ERROR_NO_SPACE_TO_SPLIT" xml:space="preserve">
-    <value>No Space available to split</value>
+    <value>No existe espacio suficiente para crear los archivos</value>
   </data>
   <data name="ERROR_OPENING_FILE" xml:space="preserve">
-    <value>Error opening {0}</value>
+    <value>Error abriendo el archivo {0}</value>
   </data>
   <data name="ERROR_TOTALSIZE_NOTEQUALS" xml:space="preserve">
-    <value>The total size of all the output file parts is not equal to the original data file size !</value>
+    <value>El tamaño total de las partes de los archivos no es igual al tamaño del archivo original!</value>
   </data>
   <data name="FILE" xml:space="preserve">
-    <value>File</value>
+    <value>Archivo</value>
   </data>
   <data name="FILE_EXTENSIONS" xml:space="preserve">
-    <value>All Files|*.*</value>
+    <value>Todos los archivos|*.*</value>
   </data>
   <data name="NUMBER_OF_LINES" xml:space="preserve">
-    <value>Number of lines</value>
+    <value>Numero de lineas</value>
   </data>
   <data name="SPLINT_INFO_PARTS_DEF" xml:space="preserve">
-    <value>0 parts of</value>
-  </data>
-  <data name="SPLITSIZE" xml:space="preserve">
-    <value>Split Size</value>
-  </data>
-  <data name="SPLITTING_FILE" xml:space="preserve">
-    <value>Splitting file {0}</value>
-  </data>
-  <data name="SPLIT_INFO" xml:space="preserve">
-    <value>First select a file to split. Next select the part size and  push on "Start" to start splitting the file in smaller parts</value>
+    <value>0 partes de</value>
   </data>
   <data name="SPLIT_INFO_PARTS" xml:space="preserve">
-    <value>{0} parts of</value>
+    <value>{0} partes de</value>
+  </data>
+  <data name="SPLITSIZE" xml:space="preserve">
+    <value>Tamaño a dividir</value>
+  </data>
+  <data name="SPLITTING_FILE" xml:space="preserve">
+    <value>Dividiendo archivo {0}</value>
   </data>
   <data name="START" xml:space="preserve">
-    <value>Start</value>
+    <value>Iniciar</value>
   </data>
   <data name="TITLE" xml:space="preserve">
-    <value>File Splitter</value>
+    <value>File Splitter [División de archivos]</value>
+  </data>
+  <data name="SPLIT_INFO" xml:space="preserve">
+    <value>Seleccione un archivo y el tamaño de la división para iniciar a partirlo en piezas.</value>
   </data>
 </root>

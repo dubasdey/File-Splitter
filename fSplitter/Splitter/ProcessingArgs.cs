@@ -15,13 +15,13 @@
 using System;
 
 namespace FileSplitter {
-	
-	internal class ProcessingArgs: EventArgs{
-       
+
+    internal class ProcessingArgs : EventArgs {
+
         /// <summary>
         /// File Name
         /// </summary>
-        private String fileName  = String.Empty;
+        private String fileName = String.Empty;
 
         /// <summary>
         /// Part number of total parts
@@ -53,24 +53,21 @@ namespace FileSplitter {
         /// <summary>
         /// Getter for Actual Part
         /// </summary>
-        public Int64 Part
-        {
+        public Int64 Part {
             get { return part; }
         }
 
         /// <summary>
         /// Getter for bytes written of actual Part
         /// </summary>
-        public Int64 PartSizeWritten
-        {
+        public Int64 PartSizeWritten {
             get { return partSizeWritten; }
         }
 
         /// <summary>
         /// Getter for  Size of a part in bytes
         /// </summary>
-        public Int64 PartSize
-        {
+        public Int64 PartSize {
             get { return partSize; }
             set { partSize = value; }
         }
@@ -78,8 +75,7 @@ namespace FileSplitter {
         /// <summary>
         /// Getter for  Total parts expected
         /// </summary>
-        public Int64 Parts
-        {
+        public Int64 Parts {
             get { return parts; }
             set { parts = value; }
         }
@@ -92,10 +88,9 @@ namespace FileSplitter {
         /// <param name="partSizeWritten">Files written in this part</param>
         /// <param name="totalParts">Total parts</param>
         /// <param name="partSize">Total size expected of each part</param>
-        public ProcessingArgs(String file, Int64 part, Int64 partSizeWritten, Int64 totalParts, Int64 partSize)
-        {
+        public ProcessingArgs(String file, Int64 part, Int64 partSizeWritten, Int64 totalParts, Int64 partSize) {
             this.fileName = file;
-            this.part  = part;
+            this.part = part;
             this.partSizeWritten = partSizeWritten;
             this.parts = totalParts;
             this.partSize = partSize;

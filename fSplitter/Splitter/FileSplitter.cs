@@ -17,11 +17,7 @@ using System.IO;
 using System.Text;
 
 namespace FileSplitter {
-
-    enum OPERATION_MODE {
-        SIZE,
-        LINES
-    }
+   
 
     /// <summary>
     /// File Splitter class.
@@ -38,20 +34,6 @@ namespace FileSplitter {
         private const Int32 BUFFER_SIZE_BIG = 1024 * 1024 * 10;
 
         private const long GIGABYTE = 1073741824L;
-
-        /// <summary>
-        ///  Unit order converter
-        /// </summary>
-        /// <param name="items"></param>
-        /// <param name="unitOrder">0 bytes 1 kbytes 2 Mbytes 3 Gb 4 Lines</param>
-        /// <returns></returns>
-        public static Int64 unitConverter(Int64 items, Int32 unitOrder) {
-            Int64 result = items;
-            if (unitOrder > 0) {
-                result = (Int64) Math.Ceiling( items * Math.Pow( 1024 , unitOrder));
-            }
-            return result;
-        }
 
         /// <summary>
         /// Delegate for Split start
@@ -110,7 +92,7 @@ namespace FileSplitter {
         /// <summary>
         /// Operation Mode
         /// </summary>
-        public OPERATION_MODE OperationMode { get; set; }
+        public OPERATION_SPIT OperationMode { get; set; }
 
         /// <summary>
         /// Calculates number of parts, based on size of file a part size
@@ -120,7 +102,7 @@ namespace FileSplitter {
         public Int64 Parts {
             get {
                 Int64 parts = 0;
-                if (OperationMode == OPERATION_MODE.SIZE) { 
+                if (OperationMode != OPERATION_SPIT.BY_LINES) { 
                     if (this.FileName != null && this.FileName.Length > 0 && File.Exists(this.FileName)) {
                         FileInfo fi = new FileInfo(this.FileName);
                         if (fi.Length > this.PartSize) {
@@ -171,9 +153,9 @@ namespace FileSplitter {
         /// </summary>
         /// <param name="msg"></param>
         /// <param name="type"></param>
-        private void onMessage(String msg, MESSAGETYPE type) {
+        private void onMessage(MESSAGE msg, params Object[] parameters) {
             if (message != null) {
-                message(this, new MessageArgs(msg, type));
+                message(this, new MessageArgs(msg,parameters));
             }
         }
 
@@ -253,7 +235,7 @@ namespace FileSplitter {
 
             // Minimun Part Size allowed 4kb
             if (this.PartSize < 1024) {
-                onMessage("Minimun part size must be 1Kb", MESSAGETYPE.WARN);
+                onMessage(MESSAGE.ERROR_MINIMUN_PART_SIZE,1024);
                 return;
             }
 
@@ -274,7 +256,7 @@ namespace FileSplitter {
             try {
                 stmOriginal = File.OpenRead(this.FileName);
             } catch {
-                onMessage("Error opening " + this.FileName, MESSAGETYPE.FATAL);
+                onMessage(MESSAGE.ERROR_OPENING_FILE);
                 return;
             }
 
@@ -341,7 +323,7 @@ namespace FileSplitter {
             }
 
             if (bytesInTotal != sourceFileSize) {
-                onMessage("The total size of all the output file parts is not equal to the original data file size !", MESSAGETYPE.ERROR);
+                onMessage(MESSAGE.ERROR_TOTALSIZE_NOTEQUALS);
             }
         }
 
@@ -358,29 +340,34 @@ namespace FileSplitter {
                 DriveInfo driveInfo = new DriveInfo(this.FileName);
                 Int64 sourceFileSize = fileNameInfo.Length;
                 if (driveInfo.AvailableFreeSpace <= fileNameInfo.Length) {
-                    onMessage("No Space available to split", MESSAGETYPE.FATAL);
+                    onMessage(MESSAGE.ERROR_NO_SPACE_TO_SPLIT);
                     return;
                 }
                 
                 // Check Drive Format Limitations
                 if (driveInfo.DriveFormat == "FAT16") { // 2gb
                     if (this.PartSize > 2 * GIGABYTE) {
-                        onMessage("FAT16 File systems does not allow more than 2 Gb for each file.", MESSAGETYPE.ERROR);
+                        onMessage(MESSAGE.ERROR_FILESYSTEM_NOTALLOW_SIZE ,"FAT16",2,"Gb");
                         return;
                     }
                 }else  if (driveInfo.DriveFormat == "FAT32") {  // 4gb
                     if (this.PartSize > 4 * GIGABYTE) {
-                        onMessage("FAT32 File systems does not allow more than 4 Gb for each file.", MESSAGETYPE.ERROR);
+                        onMessage(MESSAGE.ERROR_FILESYSTEM_NOTALLOW_SIZE, "FAT32", 4, "Gb");
+                        return;
+                    }
+                } else if (driveInfo.DriveFormat == "FAT12") {  // 4gb
+                    if (this.PartSize > 4 * GIGABYTE) {
+                        onMessage(MESSAGE.ERROR_FILESYSTEM_NOTALLOW_SIZE, "FAT12",32, "Mb");
                         return;
                     }
                 }
 
-                if (OperationMode == OPERATION_MODE.SIZE) {
-
+                if (OperationMode != OPERATION_SPIT.BY_LINES) {
                     splitBySize(this.FileName, fileNameInfo, sourceFileSize);
                 } else {
                     splitByLines(this.FileName, fileNameInfo, sourceFileSize);
                 }
+
             } finally {
                 onFinish();
             }
