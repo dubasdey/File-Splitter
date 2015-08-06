@@ -151,7 +151,7 @@ namespace FileSplitter.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Number of lines.
+        ///   Looks up a localized string similar to Number of rows.
         /// </summary>
         internal static string NUMBER_OF_LINES {
             get {
