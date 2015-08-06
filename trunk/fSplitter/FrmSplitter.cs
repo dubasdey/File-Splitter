@@ -37,29 +37,39 @@ namespace FileSplitter {
         /// Start Components & assign events
         /// </summary>
         public FrmSplitter() {
-            
             InitializeComponent();
 
-            // splitter object
+            // Init Texts
+            this.lbFile.Text = Properties.Resources.FILE;
+            this.grpSplitSize.Text = Properties.Resources.SPLITSIZE;
+            this.cmdStart.Text = Properties.Resources.START;
+            this.openFileDialog.Filter = Properties.Resources.FILE_EXTENSIONS;
+            this.lbCurrentFileProgress.Text = Properties.Resources.ACTUAL_FILE_PROGRESS;
+            this.lbAllFilesProgress.Text = Properties.Resources.ALL_FILES_PROGRESS;
+            this.lbInfo.Text = Properties.Resources.SPLIT_INFO;
+            this.lbEstimatedParts.Text = Properties.Resources.SPLINT_INFO_PARTS_DEF;
+            this.Text = Properties.Resources.TITLE;
+
+            cmbUnits.Items.Add(new ComboboxItem("bytes", OPERATION_SPIT.BY_BYTE));
+            cmbUnits.Items.Add(new ComboboxItem("Kilobytes", OPERATION_SPIT.BY_KBYTE));
+            cmbUnits.Items.Add(new ComboboxItem("Megabytes", OPERATION_SPIT.BY_MBYTE));
+            cmbUnits.Items.Add(new ComboboxItem("Gigabytes", OPERATION_SPIT.BY_GBYTE));
+            cmbUnits.Items.Add(new ComboboxItem(Properties.Resources.CMB_LINES, OPERATION_SPIT.BY_LINES));
+
             fileSplitter = new FileSplitter();
             fileSplitter.start += new FileSplitter.StartHandler(fileSplitter_splitStart);
             fileSplitter.finish += new FileSplitter.FinishHandler(fileSplitter_splitEnd);
             fileSplitter.processing += new FileSplitter.ProcessHandler(fileSplitter_splitProcess);
             fileSplitter.message += new FileSplitter.MessageHandler(fileSplitter_message);
-            cmbUnits.SelectedIndex = Properties.Settings.Default.typeIndex;
-            numSize.Value = Properties.Settings.Default.itemsNumber;
-            fileSplitter.OperationMode = cmbUnits.SelectedIndex < 4 ? OPERATION_MODE.SIZE : OPERATION_MODE.LINES;
-            fileSplitter.PartSize = FileSplitter.unitConverter((Int64)numSize.Value, cmbUnits.SelectedIndex) ; 
+
+            cmbUnits.SelectedIndex = 2;
+
+
+            loadPreferences();
         }
 
         void fileSplitter_message(object server, MessageArgs args) {
-            MessageBoxIcon icon = MessageBoxIcon.Information;
-            switch (args.Type) {
-                case MESSAGETYPE.ERROR: icon = MessageBoxIcon.Error; break;
-                case MESSAGETYPE.WARN: icon = MessageBoxIcon.Warning; break;
-                case MESSAGETYPE.FATAL: icon = MessageBoxIcon.Hand; break;
-            }
-            MessageBox.Show(args.Message, "", MessageBoxButtons.OK, icon);
+            MessageBox.Show(Utils.getMessageText(args.Message,args.Parameters), "", MessageBoxButtons.OK, Utils.getMessageIcon(args.Message));
         }
 
         /// <summary>
@@ -68,9 +78,8 @@ namespace FileSplitter {
         /// <param name="sender">spliter object</param>
         /// <param name="args">Paramaters of actual split</param>
         void fileSplitter_splitProcess(object sender, ProcessingArgs args) {
-            lbSplitInfo.Text = String.Format(lbSplitInfo.Tag.ToString(), args.FileName);
-
-            if (fileSplitter.OperationMode == OPERATION_MODE.SIZE) {
+            lbSplitInfo.Text = String.Format(Properties.Resources.SPLITTING_FILE, args.FileName);
+            if (fileSplitter.OperationMode !=  OPERATION_SPIT.BY_LINES) {
                 progressBarFiles.Style = ProgressBarStyle.Continuous;
                 int percPart = Convert.ToInt32((args.Part * 100) / args.Parts);
                 if (percPart < progressBarFiles.Maximum) {
@@ -120,10 +129,10 @@ namespace FileSplitter {
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
                 cmdStart.Enabled = true;
                 fileSplitter.FileName =  this.txtFile.Text = openFileDialog.FileName;
-                if (fileSplitter.OperationMode == OPERATION_MODE.SIZE) {
-                    lbEstimatedParts.Text = String.Format(lbEstimatedParts.Tag.ToString(), fileSplitter.Parts);
+                if (fileSplitter.OperationMode !=  OPERATION_SPIT.BY_LINES) {
+                    lbEstimatedParts.Text = String.Format(Properties.Resources.SPLIT_INFO_PARTS, fileSplitter.Parts);
                 } else {
-                    lbEstimatedParts.Text = "Number of lines";
+                    lbEstimatedParts.Text = Properties.Resources.NUMBER_OF_LINES;
                 }
             }
         }
@@ -136,13 +145,14 @@ namespace FileSplitter {
         /// <param name="e"></param>
         private void controlValueChangedEvent(object sender, EventArgs e) {
             updatePreferences();
-            fileSplitter.OperationMode = cmbUnits.SelectedIndex < 4 ? OPERATION_MODE.SIZE : OPERATION_MODE.LINES;
-            if (fileSplitter.OperationMode == OPERATION_MODE.SIZE) {
-                fileSplitter.PartSize = FileSplitter.unitConverter((Int64) numSize.Value, cmbUnits.SelectedIndex);
-                lbEstimatedParts.Text = String.Format(lbEstimatedParts.Tag.ToString(), fileSplitter.Parts);
+            if (cmbUnits.SelectedItem != null) {
+                fileSplitter.OperationMode = ((ComboboxItem)cmbUnits.SelectedItem).Value;
+            }
+            fileSplitter.PartSize = Utils.unitConverter((Int64)numSize.Value, fileSplitter.OperationMode);
+            if (fileSplitter.OperationMode != OPERATION_SPIT.BY_LINES ){
+                lbEstimatedParts.Text = String.Format(Properties.Resources.SPLIT_INFO_PARTS, fileSplitter.Parts);
             } else {
-                fileSplitter.PartSize =(Int64) numSize.Value;
-                lbEstimatedParts.Text = "Number of lines";
+                lbEstimatedParts.Text = Properties.Resources.NUMBER_OF_LINES;
             }
         }
 
@@ -152,10 +162,22 @@ namespace FileSplitter {
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void lbStart_Click(object sender, EventArgs e) {
-            updatePreferences();
             fileSplitter.doSplit();
         }
 
+        /// <summary>
+        /// Load User preferences
+        /// </summary>
+        private void loadPreferences() {
+            cmbUnits.SelectedIndex = Properties.Settings.Default.typeIndex;
+            numSize.Value = Properties.Settings.Default.itemsNumber;
+            fileSplitter.OperationMode = ((ComboboxItem)cmbUnits.SelectedItem).Value;
+            fileSplitter.PartSize = Utils.unitConverter((Int64)numSize.Value, fileSplitter.OperationMode);
+        }
+
+        /// <summary>
+        /// Store user Prefences
+        /// </summary>
         private void updatePreferences() {
             Properties.Settings.Default.typeIndex = cmbUnits.SelectedIndex;
             Properties.Settings.Default.itemsNumber = (Int32)numSize.Value;
