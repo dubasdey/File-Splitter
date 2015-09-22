@@ -1,4 +1,4 @@
-Information
+﻿Information
 -----------------------------------------------------------------------------------------
 
 A Windows and Console based utility to split large files into smaller parts.

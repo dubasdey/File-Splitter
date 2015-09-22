@@ -1,0 +1,42 @@
+﻿FileSplitter Changelog
+===============================================================
+
+FileSplitter 1.3.0 2015-08-06
+-------------------------------------------------------------
+NEW: Added support to split files by lines
+NEW: Added support to remenber user preferences (size and type)
+NEW: Added support to internationalization
+CHANGE: Changed Framework to .NET 3.5
+CHANGE: Feature #4 The last line of the txt file being split
+
+FileSplitter 1.2.3 2011-12-04
+-------------------------------------------------------------
+FIXED: Bug #4 Batch File support
+FIXED: Bug #5 Incorrect paths
+CHANGED: Feature #3	How do you recombine the files once split ?
+
+FileSplitter 1.2.2 2011-01-26
+-------------------------------------------------------------
+CHANGED: Icon desing and layouts
+
+
+FileSplitter 1.2.1 2011-01-19
+-------------------------------------------------------------
+FIXED: Bug #1 bug in proposed code
+FIXED: Bug #2 Bug in v1.02
+FIXED: Bug #3 Bug in revised V1.02 code
+
+
+FileSplitter 1.2.0 2011-01-12
+-------------------------------------------------------------
+CHANGED: Updated to .NET 2.0 Framework
+CHANGED: Feature #2	BugFix and Enhancements
+
+FileSplitter 1.1.0 2011-01-12
+-------------------------------------------------------------
+NEW: Added command line support
+CHANGED: Feature #1	Suggested improvements
+
+FileSplitter 1.0.0 2009-10-28
+--------------------------------------------------------------
+NEW: First Version
