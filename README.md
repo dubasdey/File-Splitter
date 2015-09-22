@@ -1,4 +1,5 @@
 File-Splitter
+-----------------------------------------------------------------------------------------
 
 [![Download File Splitter](https://img.shields.io/sourceforge/dm/fsplit.svg)](https://sourceforge.net/projects/fsplit/files/latest/download)
 ![LGPLv3](https://img.shields.io/badge/Licence-LGPLv3-green.svg)
