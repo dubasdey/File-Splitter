@@ -54,6 +54,6 @@ Thanks to James From Canberra, Australia. To help on some bugs, corrections, pro
 Donate
 -----------------------------------------------------------------------------------------
 Buy me a coffe to help me continue supporting this project. 
+<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7J42FBHMT9VT4">Buy me a coffe</a>
 
-https://sourceforge.net/p/fsplit/donate/?source=navbar
 
