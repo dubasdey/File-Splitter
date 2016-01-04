@@ -54,3 +54,6 @@ Thanks to James From Canberra, Australia. To help on some bugs, corrections, pro
 Donate
 -----------------------------------------------------------------------------------------
 Buy me a coffe to help me continue supporting this project. 
+
+https://sourceforge.net/p/fsplit/donate/?source=navbar
+
