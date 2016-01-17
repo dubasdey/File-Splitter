@@ -72,7 +72,6 @@ namespace FileSplitter {
                         Environment.Exit(1);  // return an ErrorLevel in case it is processed in a Batch file
                     } else {
 
-
                         // check size
                         Int64 size = 0;
                         Boolean delete = false;
@@ -107,7 +106,7 @@ namespace FileSplitter {
                         size = Utils.unitConverter(size, mode);
 
                         // check delete original
-                        if (cmd.hasKey("delete")) {
+                        if (cmd.hasKey("d")) {
                             delete = true;
                         }
 
@@ -115,7 +114,6 @@ namespace FileSplitter {
                         if (cmd.hasKey("format") ) {
                             if (cmd.hasParams("format")) {
                                 format = cmd.getParamsOfKey("format")[0];
-
                             } else {
                                 Console.WriteLine("Invalid format");
                                 cmd.printUsageHelp();
@@ -145,28 +143,8 @@ namespace FileSplitter {
                             cmd.printUsageHelp();
                             Environment.Exit(EXIT_CODE_FAIL);
                         }
-
-
                     }
-
-
-
-                } else { }
-
-                if (command.Equals("-split")) {
-                    if (args.Length < 4) {
-                        Console.WriteLine("Missing parameter");
-                        printHelp();
-                        Environment.Exit(1);  // return an ErrorLevel in case it is processed in a Batch file
-                    } else {
-
-
-                            
- 
-                    }
-
-                    /* }  TODO else if (command.Equals("-join")) {*/
-
+                    /* TODO JOIN */
                 } else {
                     Console.WriteLine("Unrecognized Command");
                     cmd.printUsageHelp();
@@ -180,9 +158,7 @@ namespace FileSplitter {
                 Application.Run(new FrmSplitter());
                 Environment.Exit(EXIT_CODE_OK);     // although there's not much point - the console window is no longer visible.  Does it need to be closed?
             }
-            
         }
-
 
         static void fs_message(object server, MessageArgs args){
             Console.WriteLine(Utils.getMessageText(args.Message, args.Parameters));

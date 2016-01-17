@@ -31,8 +31,14 @@ namespace FileSplitter {
         /// </summary>
         private const Int32 BUFFER_SIZE = 1024 * 4;
 
+        /// <summary>
+        /// Buffer size for big files
+        /// </summary>
         private const Int32 BUFFER_SIZE_BIG = 1024 * 1024 * 10;
 
+        /// <summary>
+        /// 1 GB constant
+        /// </summary>
         private const long GIGABYTE = 1073741824L;
 
         /// <summary>
@@ -90,16 +96,6 @@ namespace FileSplitter {
         public String FileName { get ; set ; }
 
         /// <summary>
-        /// File pattern
-        /// </summary>
-        public String FileFormatPattern { get; set; }
-
-        /// <summary>
-        /// Delete original file if end is correct
-        /// </summary>
-        public Boolean DeleteOriginalFile { get; set; }
-
-        /// <summary>
         /// Operation Mode
         /// </summary>
         public OPERATION_SPIT OperationMode { get; set; }
@@ -123,6 +119,40 @@ namespace FileSplitter {
                     }
                 }
                 return parts;
+            }
+        }
+
+
+
+        /// <summary>
+        /// File pattern. If different to default pattern
+        /// {0} for current file number
+        /// {1} for total files
+        /// </summary>
+        public String FileFormatPattern { get; set; }
+
+        /// <summary>
+        /// Delete original file if end is correct
+        /// </summary>
+        public Boolean DeleteOriginalFile { get; set; }
+
+        /// <summary>
+        /// Destination folder. If different to current folder
+        /// </summary>
+        public String DestinationFolder { get; set; }
+
+        /// <summary>
+        /// File used to store generated file names
+        /// </summary>
+        public String GenerationLogFile { get; set; }
+
+        /// <summary>
+        /// Adds the file name to the log file
+        /// </summary>
+        /// <param name="fileName"></param>
+        private void registerCreatedFile(String fileName) {
+            if (GenerationLogFile != null) {
+                File.AppendAllText(GenerationLogFile, fileName + Environment.NewLine);
             }
         }
 
@@ -169,50 +199,28 @@ namespace FileSplitter {
             }
         }
 
+
+
+        
         /// <summary>
-        /// Detects the byte order mark of a file and returns
-        /// an appropriate encoding for the file.
+        /// Split file by number of lines
         /// </summary>
-        /// <param name="srcFile"></param>
-        /// <returns></returns>
-        public static Encoding GetFileEncoding(string srcFile) {
-            Encoding enc = Encoding.Default;
-
-            // *** Detect byte order mark if any - otherwise assume default
-            byte[] buffer = new byte[5];
-            FileStream file = new FileStream(srcFile, FileMode.Open);
-            file.Read(buffer, 0, 5);
-            file.Close();
-
-            if (buffer[0] == 0xef && buffer[1] == 0xbb && buffer[2] == 0xbf) {
-                enc = Encoding.UTF8;
-            } else if (buffer[0] == 0xfe && buffer[1] == 0xff) {
-                enc = Encoding.Unicode;
-            } else if (buffer[0] == 0 && buffer[1] == 0 && buffer[2] == 0xfe && buffer[3] == 0xff) {
-                enc = Encoding.UTF32;
-            } else if (buffer[0] == 0x2b && buffer[1] == 0x2f && buffer[2] == 0x76) {
-                enc = Encoding.UTF7;
-            } else {
-                enc = Encoding.ASCII;
-            }
-            return enc;
-        }
-
-        private void splitByLines(String inputFileName, FileInfo fileNameInfo,Int64 sourceFileSize) {
+        /// <param name="inputFileName"></param>
+        /// <param name="fileNameInfo"></param>
+        /// <param name="sourceFileSize"></param>
+        private void splitByLines(String inputFileName,Int64 sourceFileSize) {
 
             // Prepare file buffer
             byte[] buffer = new byte[BUFFER_SIZE_BIG];
 
-            String fileNamePattern = Path.GetFileNameWithoutExtension(this.FileName) + "_{0:000000}" + fileNameInfo.Extension;
-            fileNamePattern = Path.Combine(fileNameInfo.DirectoryName, fileNamePattern);
             // File Pattern
             Int64 actualFileNumber = 1;
-            String actualFileName = String.Format(fileNamePattern, actualFileNumber, this.Parts);
+            String actualFileName = String.Format(FileFormatPattern, actualFileNumber, this.Parts);
+            registerCreatedFile(actualFileName);
 
             // Error if cant create new file
             StreamReader inputReader = new StreamReader(inputFileName,true);
             Encoding enc =  inputReader.CurrentEncoding;
-
             StreamWriter outputWriter = new StreamWriter(actualFileName,false, enc, BUFFER_SIZE_BIG);
 
             Int32 linesReaded = 0;
@@ -224,10 +232,12 @@ namespace FileSplitter {
                     outputWriter.WriteLine(line);
                     if (linesReaded >= this.PartSize) {
                         linesReaded = 0;
-                        actualFileNumber++;
-                        actualFileName = String.Format(fileNamePattern, actualFileNumber);
                         outputWriter.Flush();
                         outputWriter.Close();
+
+                        actualFileNumber++;
+                        actualFileName = String.Format(FileFormatPattern, actualFileNumber);
+                        registerCreatedFile(actualFileName);
                         outputWriter = new StreamWriter(actualFileName, false, enc, BUFFER_SIZE_BIG);
                     }
                 }
@@ -238,23 +248,12 @@ namespace FileSplitter {
             inputReader.Close();
         }
 
-        private String buildPattern(FileInfo fileNameInfo) {
-            String fileNamePattern = null;
-            if (FileFormatPattern == null) {
-                String zeros = new String('0', this.Parts.ToString().Length); // Padding
-                fileNamePattern = Path.GetFileNameWithoutExtension(this.FileName) + "_{0:" + zeros + "}({1:" + zeros + "})" + fileNameInfo.Extension;
-            } else {
-                fileNamePattern = FileFormatPattern;
-            }
-            return fileNamePattern;
-        }
-
 
 
         /// <summary>
         /// Split by size
         /// </summary>
-        private void splitBySize(String inputFileName, FileInfo fileNameInfo, Int64 sourceFileSize) {
+        private void splitBySize(String inputFileName, Int64 sourceFileSize) {
 
             // Minimun Part Size allowed 4kb
             if (this.PartSize < 1024) {
@@ -262,17 +261,14 @@ namespace FileSplitter {
                 throw new SplitFailedException();
             }
 
-            
-            String fileNamePattern = Path.GetFileNameWithoutExtension(this.FileName) + "_{0:" + zeros + "}({1:" + zeros + "})" + fileNameInfo.Extension;
-            fileNamePattern = Path.Combine(fileNameInfo.DirectoryName, fileNamePattern);
-
             // Prepare file buffer
             byte[] buffer = new byte[BUFFER_SIZE_BIG];
             Int64 bytesInTotal = 0;
 
             // File Pattern
             Int64 actualFileNumber = 1;
-            String actualFileName = String.Format(fileNamePattern, actualFileNumber, this.Parts);
+            String actualFileName = String.Format(FileFormatPattern, actualFileNumber, this.Parts);
+            registerCreatedFile(actualFileName);
 
             // Check if file can be opened for read
             FileStream stmOriginal = null;
@@ -320,7 +316,9 @@ namespace FileSplitter {
                             bytesInPart = 0;
 
                             actualFileNumber++;
-                            actualFileName = String.Format(fileNamePattern, actualFileNumber, parts);
+                            actualFileName = String.Format(FileFormatPattern, actualFileNumber, parts);
+                            registerCreatedFile(actualFileName);
+
                             stmWriter = File.Create(actualFileName);
 
                             // Write the rest of the buffer if required into the new file
@@ -363,7 +361,14 @@ namespace FileSplitter {
                 // Check Space available
                 DriveInfo driveInfo = new DriveInfo(this.FileName);
                 Int64 sourceFileSize = fileNameInfo.Length;
-                if (driveInfo.AvailableFreeSpace <= fileNameInfo.Length) {
+
+                // Builds default pattern if FileFormatPattern is null
+                if (FileFormatPattern == null) {
+                    String zeros = new String('0', this.Parts.ToString().Length); // Padding
+                    FileFormatPattern = Path.GetFileNameWithoutExtension(this.FileName) + "_{0:" + zeros + "}({1:" + zeros + "})" + fileNameInfo.Extension;
+                }
+
+                if (driveInfo.AvailableFreeSpace <= sourceFileSize) {
                     onMessage(MESSAGE.ERROR_NO_SPACE_TO_SPLIT);
                     throw new SplitFailedException();
                 }
@@ -387,18 +392,17 @@ namespace FileSplitter {
                 }
 
                 if (OperationMode != OPERATION_SPIT.BY_LINES) {
-                    splitBySize(this.FileName, fileNameInfo, sourceFileSize);
+                    splitBySize(this.FileName, sourceFileSize);
                 } else {
-                    splitByLines(this.FileName, fileNameInfo, sourceFileSize);
+                    splitByLines(this.FileName, sourceFileSize);
                 }
-
 
                 // If no Exception breaks copy (delete new if required)
                 if (DeleteOriginalFile) {
                     fileNameInfo.Delete();
                 }
             } catch (Exception){ 
-
+                //TODO
             } finally {
                 onFinish();
             }

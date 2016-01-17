@@ -26,7 +26,7 @@ namespace FileSplitter {
                 if (arg.StartsWith("-")) {
                     lastKey = arg.Replace("-", "");
                     if (!parameters.ContainsKey(arg)) {
-                        parameters.Add(arg, new List<string>);
+                        parameters.Add(arg, new List<string>());
                     }
                 } else {
                     parameters[lastKey].Add(arg);
@@ -59,7 +59,7 @@ namespace FileSplitter {
 
         public void printUsageHelp() {
             Console.WriteLine("Usage:");
-            Console.WriteLine("fsplit -split <size> <unit> <filePath> [-d] [-f <format>]");
+            Console.WriteLine("fsplit -split <size> <unit> <filePath> [-d] [-f <format>] [-dfolder <folder>] [-lf <file>]");
             Console.WriteLine();
             Console.WriteLine("Parameter help:");
             Console.WriteLine();
@@ -75,13 +75,18 @@ namespace FileSplitter {
             Console.WriteLine("                gb - gigabytes");
             Console.WriteLine("                l  - lines (based on endline detection)");
             Console.WriteLine();
-            Console.WriteLine("  filePath    Path of the file to be split");
+            Console.WriteLine("  filePath    Path of the file to be split.");
             Console.WriteLine();
-            Console.WriteLine("-delete       Delete the original file");
+            Console.WriteLine(" -d           Delete the original file if the process is done.");
             Console.WriteLine();
-            Console.WriteLine("-format       Use a custom format using pattern replacements");
+            Console.WriteLine(" -df <folder>");
+            Console.WriteLine("              Set destination folder for files.");
+            Console.WriteLine(" -lf <file>");
+            Console.WriteLine("              Set a file to store generated names.");
+            Console.WriteLine();
+            Console.WriteLine(" -f <format>  Use a custom format using pattern replacements");
             Console.WriteLine("               {0} the current part");
-            Console.WriteLine("               {1} the last part");
+            Console.WriteLine("               {1} number of parts");
             Console.WriteLine();
         }
     }
