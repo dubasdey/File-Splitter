@@ -22,6 +22,10 @@ using System.Threading;
 using System.Runtime.InteropServices;
 
 namespace FileSplitter {
+
+    /// <summary>
+    /// Program start
+    /// </summary>
     static class Program {
 		
 		private static Int32 EXIT_CODE_OK= 0;
@@ -35,28 +39,6 @@ namespace FileSplitter {
 
         private static String lastFile = "";
 
-        private static void printHelp() {
-            Console.WriteLine("Usage:");
-            Console.WriteLine("fsplit -split <size> <unit> <filePath>");
-            Console.WriteLine();
-            Console.WriteLine("Parameter help:");
-            Console.WriteLine();
-            Console.WriteLine("-split");
-            Console.WriteLine("  size        Size of parts");
-            Console.WriteLine("                If size unit is 'l' defines number of lines");
-            Console.WriteLine("                in other case the size in the selected unit");
-            Console.WriteLine();
-            Console.WriteLine("  unit        unit of size 'b' 'kb 'mb' 'gb' 'l'");
-            Console.WriteLine("                b  - bytes");
-            Console.WriteLine("                kb - Kilobytes");
-            Console.WriteLine("                mb - megabytes");
-            Console.WriteLine("                gb - gigabytes");
-            Console.WriteLine("                l  - lines (based on endline detection)");
-            Console.WriteLine();
-            Console.WriteLine("  filePath    Path of the file to be split");
-            Console.WriteLine();
-        }
-   
         private static void setConsoleWindowVisibility(bool visible) {
             IntPtr hWnd = FindWindow(null, Console.Title);
             if (hWnd != IntPtr.Zero) {
@@ -75,35 +57,36 @@ namespace FileSplitter {
         /// </summary>
         [STAThread]
         static void Main(String[] args) {
-
-            // args:
-            // 0 - action
-            // 1 - split size
-            // 2 - split units
-            // 3 - file
             Console.Title = Application.ProductName +  " " + Application.ProductVersion + " Console Window";
+            CommandLine cmd = new CommandLine();
+ 
+            if (args != null && args.Length > 1) {
+   
+                cmd.parseArguments(args);
 
-             if (args != null && args.Length > 1) {
-                String command = args[0];
-
-                if (command.Equals("-split")) {
-                    if (args.Length < 4) {
+                if (cmd.hasKey("split")) {
+                    List<string> splitParams = cmd.getParamsOfKey("split");
+                    if (splitParams.Count < 3) {
                         Console.WriteLine("Missing parameter");
-                        printHelp();
+                        cmd.printUsageHelp();
                         Environment.Exit(1);  // return an ErrorLevel in case it is processed in a Batch file
                     } else {
 
-                        OPERATION_SPIT mode = OPERATION_SPIT.BY_BYTE;
 
                         // check size
                         Int64 size = 0;
+                        Boolean delete = false;
+                        string format = null;
+
                         try {
-                            size = Convert.ToInt64(args[1]);
+                            size = Convert.ToInt64(splitParams[0]);
                         } catch {
                             Console.WriteLine("Invalid size");
-                            printHelp();
+                            cmd.printUsageHelp();
                             Environment.Exit(EXIT_CODE_FAIL);
                         }
+
+                        OPERATION_SPIT mode = OPERATION_SPIT.BY_BYTE;
 
                         // check units
                         if (args[2].ToLower() == "b") {
@@ -118,12 +101,28 @@ namespace FileSplitter {
                             mode = OPERATION_SPIT.BY_LINES;
                         } else {
                             Console.WriteLine("Invalid size unit");
-                            printHelp();
+                            cmd.printUsageHelp();
                             Environment.Exit(EXIT_CODE_FAIL);
                         }
-
                         size = Utils.unitConverter(size, mode);
-                            
+
+                        // check delete original
+                        if (cmd.hasKey("delete")) {
+                            delete = true;
+                        }
+
+                        // check format
+                        if (cmd.hasKey("format") ) {
+                            if (cmd.hasParams("format")) {
+                                format = cmd.getParamsOfKey("format")[0];
+
+                            } else {
+                                Console.WriteLine("Invalid format");
+                                cmd.printUsageHelp();
+                                Environment.Exit(EXIT_CODE_FAIL);
+                            }
+                        }
+
                         // check file exists
                         String fileName = args[3];
                         if (File.Exists(fileName)) {
@@ -135,20 +134,42 @@ namespace FileSplitter {
                             fs.FileName = fileName;
                             fs.PartSize = size;
                             fs.OperationMode = mode;
+                            fs.DeleteOriginalFile = delete;
+                            if (format != null) {
+                                fs.FileFormatPattern = format;
+                            }
                             fs.doSplit();
                             Environment.Exit(EXIT_CODE_OK);       // return an ErrorLevel indicating successful launch
                         } else {
                             Console.WriteLine("File does not exist");
-                            printHelp();
+                            cmd.printUsageHelp();
                             Environment.Exit(EXIT_CODE_FAIL);
                         }
+
+
+                    }
+
+
+
+                } else { }
+
+                if (command.Equals("-split")) {
+                    if (args.Length < 4) {
+                        Console.WriteLine("Missing parameter");
+                        printHelp();
+                        Environment.Exit(1);  // return an ErrorLevel in case it is processed in a Batch file
+                    } else {
+
+
+                            
+ 
                     }
 
                     /* }  TODO else if (command.Equals("-join")) {*/
 
                 } else {
                     Console.WriteLine("Unrecognized Command");
-                    printHelp();
+                    cmd.printUsageHelp();
                     Environment.Exit(EXIT_CODE_FAIL);
                 }
 

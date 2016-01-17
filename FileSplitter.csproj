@@ -86,6 +86,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ComboboxItem.cs" />
+    <Compile Include="CommandLine.cs" />
     <Compile Include="FrmSplitter.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -97,6 +98,7 @@
     <Compile Include="Splitter\FileSplitter.cs" />
     <Compile Include="Splitter\MessageArgs.cs" />
     <Compile Include="Splitter\ProcessingArgs.cs" />
+    <Compile Include="Splitter\SplitFailedException.cs" />
     <Compile Include="Splitter\Utils.cs" />
     <EmbeddedResource Include="FrmSplitter.en-GB.resx">
       <DependentUpon>FrmSplitter.cs</DependentUpon>
@@ -146,9 +148,6 @@
   <ItemGroup>
     <Content Include="app.ico" />
     <Content Include="changelog.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="gpl.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="readme.txt">

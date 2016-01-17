@@ -90,6 +90,16 @@ namespace FileSplitter {
         public String FileName { get ; set ; }
 
         /// <summary>
+        /// File pattern
+        /// </summary>
+        public String FileFormatPattern { get; set; }
+
+        /// <summary>
+        /// Delete original file if end is correct
+        /// </summary>
+        public Boolean DeleteOriginalFile { get; set; }
+
+        /// <summary>
         /// Operation Mode
         /// </summary>
         public OPERATION_SPIT OperationMode { get; set; }
@@ -228,6 +238,19 @@ namespace FileSplitter {
             inputReader.Close();
         }
 
+        private String buildPattern(FileInfo fileNameInfo) {
+            String fileNamePattern = null;
+            if (FileFormatPattern == null) {
+                String zeros = new String('0', this.Parts.ToString().Length); // Padding
+                fileNamePattern = Path.GetFileNameWithoutExtension(this.FileName) + "_{0:" + zeros + "}({1:" + zeros + "})" + fileNameInfo.Extension;
+            } else {
+                fileNamePattern = FileFormatPattern;
+            }
+            return fileNamePattern;
+        }
+
+
+
         /// <summary>
         /// Split by size
         /// </summary>
@@ -236,10 +259,10 @@ namespace FileSplitter {
             // Minimun Part Size allowed 4kb
             if (this.PartSize < 1024) {
                 onMessage(MESSAGE.ERROR_MINIMUN_PART_SIZE,1024);
-                return;
+                throw new SplitFailedException();
             }
 
-            String zeros = new String('0', this.Parts.ToString().Length); // Padding
+            
             String fileNamePattern = Path.GetFileNameWithoutExtension(this.FileName) + "_{0:" + zeros + "}({1:" + zeros + "})" + fileNameInfo.Extension;
             fileNamePattern = Path.Combine(fileNameInfo.DirectoryName, fileNamePattern);
 
@@ -257,7 +280,7 @@ namespace FileSplitter {
                 stmOriginal = File.OpenRead(this.FileName);
             } catch {
                 onMessage(MESSAGE.ERROR_OPENING_FILE);
-                return;
+                throw new SplitFailedException();
             }
 
             // Error if cant create new file
@@ -324,6 +347,7 @@ namespace FileSplitter {
 
             if (bytesInTotal != sourceFileSize) {
                 onMessage(MESSAGE.ERROR_TOTALSIZE_NOTEQUALS);
+                throw new SplitFailedException();
             }
         }
 
@@ -332,33 +356,33 @@ namespace FileSplitter {
         /// </summary>
         public void doSplit() {
             try {
-				onStart();
+                onStart();
 
-                FileInfo fileNameInfo = new FileInfo (this.FileName);
+                FileInfo fileNameInfo = new FileInfo(this.FileName);
 
                 // Check Space available
                 DriveInfo driveInfo = new DriveInfo(this.FileName);
                 Int64 sourceFileSize = fileNameInfo.Length;
                 if (driveInfo.AvailableFreeSpace <= fileNameInfo.Length) {
                     onMessage(MESSAGE.ERROR_NO_SPACE_TO_SPLIT);
-                    return;
+                    throw new SplitFailedException();
                 }
-                
+
                 // Check Drive Format Limitations
                 if (driveInfo.DriveFormat == "FAT16") { // 2gb
                     if (this.PartSize > 2 * GIGABYTE) {
-                        onMessage(MESSAGE.ERROR_FILESYSTEM_NOTALLOW_SIZE ,"FAT16",2,"Gb");
-                        return;
+                        onMessage(MESSAGE.ERROR_FILESYSTEM_NOTALLOW_SIZE, "FAT16", 2, "Gb");
+                        throw new SplitFailedException();
                     }
-                }else  if (driveInfo.DriveFormat == "FAT32") {  // 4gb
+                } else if (driveInfo.DriveFormat == "FAT32") {  // 4gb
                     if (this.PartSize > 4 * GIGABYTE) {
                         onMessage(MESSAGE.ERROR_FILESYSTEM_NOTALLOW_SIZE, "FAT32", 4, "Gb");
-                        return;
+                        throw new SplitFailedException();
                     }
                 } else if (driveInfo.DriveFormat == "FAT12") {  // 4gb
                     if (this.PartSize > 4 * GIGABYTE) {
-                        onMessage(MESSAGE.ERROR_FILESYSTEM_NOTALLOW_SIZE, "FAT12",32, "Mb");
-                        return;
+                        onMessage(MESSAGE.ERROR_FILESYSTEM_NOTALLOW_SIZE, "FAT12", 32, "Mb");
+                        throw new SplitFailedException();
                     }
                 }
 
@@ -367,6 +391,13 @@ namespace FileSplitter {
                 } else {
                     splitByLines(this.FileName, fileNameInfo, sourceFileSize);
                 }
+
+
+                // If no Exception breaks copy (delete new if required)
+                if (DeleteOriginalFile) {
+                    fileNameInfo.Delete();
+                }
+            } catch (Exception){ 
 
             } finally {
                 onFinish();
