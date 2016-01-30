@@ -42,6 +42,10 @@ namespace FileSplitter {
         private const long GIGABYTE = 1073741824L;
 
         /// <summary>
+        /// 1 MB constant
+        /// </summary>
+        private const long MEGABYTE = 1048576L;
+        /// <summary>
         /// Delegate for Split start
         /// </summary>
         public delegate void StartHandler();
@@ -402,7 +406,7 @@ namespace FileSplitter {
                         throw new SplitFailedException();
                     }
                 } else if (driveInfo.DriveFormat == "FAT12") {  // 4gb
-                    if (this.PartSize > 4 * GIGABYTE) {
+                    if (this.PartSize > 32 * MEGABYTE) {
                         onMessage(MESSAGE.ERROR_FILESYSTEM_NOTALLOW_SIZE, "FAT12", 32, "Mb");
                         throw new SplitFailedException();
                     }
