@@ -13,9 +13,7 @@
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ApplicationIcon>app.ico</ApplicationIcon>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
-    <SourceAnalysisOverrideSettingsFile>C:\Users\erodriguez.QUANTOBIT\AppData\Roaming\ICSharpCode/SharpDevelop4.0\Settings.SourceAnalysis</SourceAnalysisOverrideSettingsFile>
+    <TargetFrameworkProfile></TargetFrameworkProfile>
     <SignAssembly>False</SignAssembly>
     <DelaySign>False</DelaySign>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
@@ -79,7 +77,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
@@ -101,12 +98,6 @@
     <Compile Include="Splitter\SplitFailedException.cs" />
     <Compile Include="Splitter\Utils.cs" />
     <Content Include="Test\test_256.txt" />
-    <EmbeddedResource Include="FrmSplitter.en-GB.resx">
-      <DependentUpon>FrmSplitter.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FrmSplitter.en.resx">
-      <DependentUpon>FrmSplitter.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="FrmSplitter.resx">
       <DependentUpon>FrmSplitter.cs</DependentUpon>
     </EmbeddedResource>
@@ -140,9 +131,6 @@
     <Content Include="changelog.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="readme.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
@@ -162,11 +150,4 @@
     </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

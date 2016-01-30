@@ -126,8 +126,6 @@ namespace FileSplitter {
             }
         }
 
-
-
         /// <summary>
         /// File pattern. If different to default pattern
         /// {0} for current file number
@@ -225,9 +223,6 @@ namespace FileSplitter {
         /// <param name="sourceFileSize"></param>
         private void splitByLines(String inputFileName,Int64 sourceFileSize) {
 
-            // Prepare file buffer
-            byte[] buffer = new byte[BUFFER_SIZE_BIG];
-
             // File Pattern
             Int64 actualFileNumber = 1;
             String actualFileName = getNextFileName(actualFileNumber);
@@ -259,9 +254,6 @@ namespace FileSplitter {
             outputWriter.Close();
             inputReader.Close();
         }
-
-
-
 
         /// <summary>
         /// Split by size
