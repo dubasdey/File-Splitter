@@ -56,6 +56,9 @@ namespace FileSplitter {
             return parameters[key];
         }
 
+        public String getParamsOfKeyAsString(string key) {
+            return parameters[key].Aggregate((i, j) => i + " " +j);
+        }
 
         public void printUsageHelp() {
             Console.WriteLine("Usage:");

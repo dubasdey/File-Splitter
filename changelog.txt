@@ -1,12 +1,13 @@
 ﻿FileSplitter Changelog
 ===============================================================
 
-FileSplitter 1.4.0 2016-00-00
+FileSplitter 1.4.0 2016-02-05
 -------------------------------------------------------------
 NEW: Added support to delete original file on complete (Command line)
 NEW: Added support to set custom file format (Command line)
 NEW: Added support to set destination folder (Command line)
 NEW: Added support to write a file with generated file names (Command line)
+FIXED: running in powershell or from cmd limits split size to 2Gb
 
 FileSplitter 1.3.0 2015-08-06
 -------------------------------------------------------------

@@ -76,7 +76,11 @@ namespace FileSplitter {
                         Int64 size = 0;
                         Boolean delete = false;
                         string format = null;
+                        String destinationFolder = null;
+                        String outLogFile = null;
+                        OPERATION_SPIT mode = OPERATION_SPIT.BY_BYTE;
 
+                        // Check size
                         try {
                             size = Convert.ToInt64(splitParams[0]);
                         } catch {
@@ -85,7 +89,6 @@ namespace FileSplitter {
                             Environment.Exit(EXIT_CODE_FAIL);
                         }
 
-                        OPERATION_SPIT mode = OPERATION_SPIT.BY_BYTE;
 
                         // check units
                         if (args[2].ToLower() == "b") {
@@ -111,11 +114,33 @@ namespace FileSplitter {
                         }
 
                         // check format
-                        if (cmd.hasKey("format") ) {
-                            if (cmd.hasParams("format")) {
-                                format = cmd.getParamsOfKey("format")[0];
+                        if (cmd.hasKey("f") ) {
+                            if (cmd.hasParams("f")) {
+                                format = cmd.getParamsOfKeyAsString("f");
                             } else {
                                 Console.WriteLine("Invalid format");
+                                cmd.printUsageHelp();
+                                Environment.Exit(EXIT_CODE_FAIL);
+                            }
+                        }
+
+                        // Check destination Folder
+                        if (cmd.hasKey("df")) {
+                            if (cmd.hasParams("df")) {
+                                destinationFolder = cmd.getParamsOfKeyAsString("df");
+                            } else {
+                                Console.WriteLine("Invalid destination");
+                                cmd.printUsageHelp();
+                                Environment.Exit(EXIT_CODE_FAIL);
+                            }
+                        }
+
+                        // Check file to save names
+                        if (cmd.hasKey("lf")) {
+                            if (cmd.hasParams("lf")) {
+                                outLogFile = cmd.getParamsOfKeyAsString("lf");
+                            } else {
+                                Console.WriteLine("Invalid file");
                                 cmd.printUsageHelp();
                                 Environment.Exit(EXIT_CODE_FAIL);
                             }
@@ -133,6 +158,9 @@ namespace FileSplitter {
                             fs.PartSize = size;
                             fs.OperationMode = mode;
                             fs.DeleteOriginalFile = delete;
+                            fs.DestinationFolder = destinationFolder;
+                            fs.GenerationLogFile = outLogFile;
+
                             if (format != null) {
                                 fs.FileFormatPattern = format;
                             }
@@ -173,7 +201,6 @@ namespace FileSplitter {
                 lastFile = args.FileName;
                 Console.WriteLine("Writing " + lastFile);
             } 
-            
         }
 
         static void fs_splitEnd() {
