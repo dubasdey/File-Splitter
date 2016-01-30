@@ -2,11 +2,12 @@ language: csharp
 solution: FileSplitter.sln
 before_deploy:
  - cd bin/Release/
- - zip FileSplitter.zip fSplit.exe fSplit.exe.config ../../changelog.txt ../../LICENCE ../../README.md
+ - zip FileSplitter.zip fSplit.exe fSplit.exe.config ../../changelog.txt ../../LICENSE ../../README.md
+ - cp FileSplitter.zip ../../FileSplitter.zip
 deploy:
   provider: releases
   api_key: $GITAPI
-  file: "bin/Release/FileSplitter.zip"
+  file: "FileSplitter.zip"
   skip_cleanup: true
   on:
     tags: true
