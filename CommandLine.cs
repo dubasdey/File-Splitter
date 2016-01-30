@@ -25,8 +25,8 @@ namespace FileSplitter {
             foreach (String arg in args) {
                 if (arg.StartsWith("-")) {
                     lastKey = arg.Replace("-", "");
-                    if (!parameters.ContainsKey(arg)) {
-                        parameters.Add(arg, new List<string>());
+                    if (!parameters.ContainsKey(lastKey)) {
+                        parameters.Add(lastKey, new List<string>());
                     }
                 } else {
                     parameters[lastKey].Add(arg);
@@ -59,7 +59,7 @@ namespace FileSplitter {
 
         public void printUsageHelp() {
             Console.WriteLine("Usage:");
-            Console.WriteLine("fsplit -split <size> <unit> <filePath> [-d] [-f <format>] [-dfolder <folder>] [-lf <file>]");
+            Console.WriteLine("fsplit -split <size> <unit> <filePath> [-d] [-f <format>] [-df <folder>] [-lf <file>]");
             Console.WriteLine();
             Console.WriteLine("Parameter help:");
             Console.WriteLine();

@@ -105,14 +105,14 @@ namespace FileSplitter {
         /// </summary>
         // modified to return long
         // relies on other code to ensure file name exists
-        public Int64 Parts {
+        public Int32 Parts {
             get {
-                Int64 parts = 0;
+                Int32 parts = 0;
                 if (OperationMode != OPERATION_SPIT.BY_LINES) { 
                     if (this.FileName != null && this.FileName.Length > 0 && File.Exists(this.FileName)) {
                         FileInfo fi = new FileInfo(this.FileName);
                         if (fi.Length > this.PartSize) {
-                            parts = (Int64)Math.Ceiling((double)fi.Length / this.PartSize);
+                            parts = (Int32)Math.Ceiling((double)fi.Length / this.PartSize);
                         } else {
                             parts = 1;
                         }
@@ -357,17 +357,18 @@ namespace FileSplitter {
                 onStart();
 
                 FileInfo fileNameInfo = new FileInfo(this.FileName);
-
+                
                 // Check Space available
                 DriveInfo driveInfo = new DriveInfo(this.FileName);
                 Int64 sourceFileSize = fileNameInfo.Length;
 
                 // Builds default pattern if FileFormatPattern is null
                 if (FileFormatPattern == null) {
-                    String zeros = new String('0', this.Parts.ToString().Length); // Padding
+                    String zeros = new String('0',  this.Parts); // Padding
                     FileFormatPattern = Path.GetFileNameWithoutExtension(this.FileName) + "_{0:" + zeros + "}({1:" + zeros + "})" + fileNameInfo.Extension;
                 }
-
+                
+                // Exception if not space available
                 if (driveInfo.AvailableFreeSpace <= sourceFileSize) {
                     onMessage(MESSAGE.ERROR_NO_SPACE_TO_SPLIT);
                     throw new SplitFailedException();

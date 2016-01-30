@@ -12,6 +12,6 @@
     <VerifyUploadedFiles>false</VerifyUploadedFiles>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
-    <StartArguments />
+    <StartArguments>-split 1 kb toDelete.txt -d -f sp_{0:0000}_of_{1:0000}.txt -df result -f files.txt</StartArguments>
   </PropertyGroup>
 </Project>

@@ -100,6 +100,7 @@
     <Compile Include="Splitter\ProcessingArgs.cs" />
     <Compile Include="Splitter\SplitFailedException.cs" />
     <Compile Include="Splitter\Utils.cs" />
+    <Content Include="Test\test_256.txt" />
     <EmbeddedResource Include="FrmSplitter.en-GB.resx">
       <DependentUpon>FrmSplitter.cs</DependentUpon>
     </EmbeddedResource>
@@ -123,18 +124,6 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <None Include="app.config" />
-    <Content Include="Batch File Examples\BatchFile_Examples.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Batch File Examples\Conquer.bat">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Batch File Examples\DivideAndConquer.bat">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Batch File Examples\Master.bat">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -144,6 +133,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="Test\test.bat" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="app.ico" />
