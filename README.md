@@ -1,4 +1,4 @@
-File-Splitter
+# File-Splitter
 -----------------------------------------------------------------------------------------
 
 [![Download File Splitter](https://img.shields.io/sourceforge/dm/fsplit.svg)](https://sourceforge.net/projects/fsplit/files/latest/download)
@@ -6,7 +6,7 @@ File-Splitter
 [![Build Status](https://travis-ci.org/dubasdey/File-Splitter.svg?branch=master)](https://travis-ci.org/dubasdey/File-Splitter)
 
 
-Information
+## Information
 -----------------------------------------------------------------------------------------
 
 A Windows and Console based utility to split large files into smaller parts.
@@ -28,8 +28,11 @@ example:
 	console_3(3).log
 
 
-How To Use	
+## How To Use	
 -----------------------------------------------------------------------------------------
+
+### Split
+
 
 Command line usage:
 ```
@@ -78,8 +81,14 @@ Example:
 * Note 1: you can't use commas as delimiters
 * Note 2: if you call the program from the console without parameters, it invokes the Windows version.
 
+### Join
 
-Donate
+It's possible to merge again the files using the command line with the "copy" command  
+For example if you have splitted a text file into two parts "p1.txt" and "p2.txt" with "copy /A p1.txt+p2.txt all.txt" it's possible to merge p1 and p2 in a new file called all.txt  
+If the files are ASCII use /A flag and if the files are binary use the /B flag to ensure that the content is correctly joined.  
+Take careful to put all files in the correct order.  
+
+## Donate
 -----------------------------------------------------------------------------------------
 Buy me a coffe to help me continue supporting this project. 
 <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7J42FBHMT9VT4">Buy me a coffe</a>
