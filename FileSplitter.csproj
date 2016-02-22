@@ -13,7 +13,8 @@
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ApplicationIcon>app.ico</ApplicationIcon>
-    <TargetFrameworkProfile></TargetFrameworkProfile>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <SignAssembly>False</SignAssembly>
     <DelaySign>False</DelaySign>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
@@ -98,6 +99,7 @@
     <Compile Include="Splitter\SplitFailedException.cs" />
     <Compile Include="Splitter\Utils.cs" />
     <Content Include="Test\test_256.txt" />
+    <Content Include="Test\test_28.txt" />
     <EmbeddedResource Include="FrmSplitter.resx">
       <DependentUpon>FrmSplitter.cs</DependentUpon>
     </EmbeddedResource>
