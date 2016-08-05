@@ -57,11 +57,11 @@ Parameters:
 	* -d 
 		* Delete the original file after the split is done correctly.
 	* -f <format>
-		* Uses a custom format for the files. Using a custom format is required to add an extension
+		* Uses a custom format for the file names. Using a custom format is required to add an extension
 		The text {0} is replaced with the current part number.  
 		The text {1} is replaced with the total number of parts expected.  
 		The format inputs accepts parameters to adapt it to the desired funcionality.  
-		For you could specify a padding of **n** possitions adding **,n**.  
+		For you could specify a padding of **n** positions adding **,n**.  
 		Example of 5 chars padding **{0,5}** with right align or **{0,-5}** to left align.    
 		Also you could specify a numeric filling usin # and 0 after :  
 		Examples for the file number 15:    
@@ -77,6 +77,11 @@ Parameters:
 Example: 
 
 	fSplit -split 10230 kb c:\console\console.log   
+
+WARNING: Cutting by file size currently cuts lines in half. To keep lines together use the option to split by line numbers, eg:
+
+	fSplit -split 100000 l c:\console\console.log   
+
 
 * Note 1: you can't use commas as delimiters
 * Note 2: if you call the program from the console without parameters, it invokes the Windows version.
