@@ -13,73 +13,28 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 using System;
-
 namespace FileSplitter {
-
     internal class ProcessingArgs : EventArgs {
-
         /// <summary>
         /// File Name
         /// </summary>
-        private String fileName = String.Empty;
-
+        public String FileName { get; private set; } = String.Empty;
         /// <summary>
         /// Part number of total parts
         /// </summary>
-        private Int64 part = 0;
-
+        public Int64 Part { get; private set; } = 0;
         /// <summary>
         /// Partsize Written
         /// </summary>
-        private Int64 partSizeWritten = 0;
-
+        public Int64 PartSizeWritten { get; private set; } = 0;
         /// <summary>
         /// Total parts
         /// </summary>
-        private Int64 parts;
-
+        public Int64 Parts { get; private set; }
         /// <summary>
         /// Size in bytes of each part
         /// </summary>
-        private Int64 partSize;
-
-        /// <summary>
-        /// Geter for FileName
-        /// </summary>
-        public String FileName {
-            get { return fileName; }
-        }
-
-        /// <summary>
-        /// Getter for Actual Part
-        /// </summary>
-        public Int64 Part {
-            get { return part; }
-        }
-
-        /// <summary>
-        /// Getter for bytes written of actual Part
-        /// </summary>
-        public Int64 PartSizeWritten {
-            get { return partSizeWritten; }
-        }
-
-        /// <summary>
-        /// Getter for  Size of a part in bytes
-        /// </summary>
-        public Int64 PartSize {
-            get { return partSize; }
-            set { partSize = value; }
-        }
-
-        /// <summary>
-        /// Getter for  Total parts expected
-        /// </summary>
-        public Int64 Parts {
-            get { return parts; }
-            set { parts = value; }
-        }
-
+        public Int64 PartSize { get; private set; }
         /// <summary>
         /// Argument constructor
         /// </summary>
@@ -89,11 +44,11 @@ namespace FileSplitter {
         /// <param name="totalParts">Total parts</param>
         /// <param name="partSize">Total size expected of each part</param>
         public ProcessingArgs(String file, Int64 part, Int64 partSizeWritten, Int64 totalParts, Int64 partSize) {
-            this.fileName = file;
-            this.part = part;
-            this.partSizeWritten = partSizeWritten;
-            this.parts = totalParts;
-            this.partSize = partSize;
+            FileName = file;
+            Part = part;
+            PartSizeWritten = partSizeWritten;
+            Parts = totalParts;
+            PartSize = partSize;
         }
     }
 }

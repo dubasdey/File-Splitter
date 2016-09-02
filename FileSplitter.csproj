@@ -93,11 +93,14 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Splitter\FileSplitter.cs" />
+    <Compile Include="Enums\ExceptionsMessages.cs" />
+    <Compile Include="Enums\SplitUnit.cs" />
+    <Compile Include="Splitter\FileSplitWorker.cs" />
     <Compile Include="Splitter\MessageArgs.cs" />
     <Compile Include="Splitter\ProcessingArgs.cs" />
-    <Compile Include="Splitter\SplitFailedException.cs" />
+    <Compile Include="Exceptions\SplitFailedException.cs" />
     <Compile Include="Splitter\Utils.cs" />
+    <Compile Include="Attributes\UnitAttribute.cs" />
     <Content Include="Test\test_256.txt" />
     <Content Include="Test\test_28.txt" />
     <EmbeddedResource Include="FrmSplitter.resx">
