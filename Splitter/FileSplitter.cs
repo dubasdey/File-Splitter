@@ -376,7 +376,8 @@ namespace FileSplitter {
 
                 // Builds default pattern if FileFormatPattern is null
                 if (FileFormatPattern == null) {
-                    String zeros = new String('0',  this.Parts); // Padding
+                    // Use the part's string length (e.g. '123' -> 3) to determine the amount of padding needed
+                    String zeros = new String('0', this.Parts.ToString().Length); // Padding
                     FileFormatPattern = Path.GetFileNameWithoutExtension(this.FileName) + "_{0:" + zeros + "}({1:" + zeros + "})" + fileNameInfo.Extension;
                 }
                 
