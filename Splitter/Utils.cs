@@ -80,7 +80,7 @@ namespace FileSplitter
                     message = String.Format(Properties.Resources.ERROR_OPENING_FILE, args);
                     break;
                 case ExceptionsMessages.ERROR_TOTALSIZE_NOTEQUALS:
-                    message = Properties.Resources.ERROR_OPENING_FILE;
+                    message = Properties.Resources.ERROR_TOTALSIZE_NOTEQUALS;
                     break;
                 default:
                     message = string.Empty;
