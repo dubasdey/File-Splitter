@@ -12,27 +12,31 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-using FileSplitter.Enums;
-using System;
+using FileSplitter.Attributes;
 
-namespace FileSplitter {
+namespace FileSplitter.Enums
+{
     /// <summary>
-    /// Arguments for Split message
+    /// The unit of how to split the files
     /// </summary>
-    internal class MessageArgs : EventArgs {
-    	/// <summary>
-    	/// Message to show
-    	/// </summary>
-        public ExceptionsMessages Message { get; set; }        
-        public Object[] Parameters { get; set; }
+    /// <created>Nick</created>
+    internal enum SplitUnit
+    {
         /// <summary>
-        /// Constructor for the message
+        /// Specify an incorrect entry to allow the reflection-based parser to return 
+        /// default(T) without additional constructors and wrappers.
         /// </summary>
-        /// <param name="message"></param>
-        /// <param name="type"></param>
-        public MessageArgs(ExceptionsMessages message, Object[] parameters) {
-            this.Message = message;
-            this.Parameters = parameters;
-        }
+        /// <created>Nick</created>
+        Incorrect = 0,
+        [UnitAttribute(CommandLine.UnitBytes, 0)]
+        Bytes,
+        [UnitAttribute(CommandLine.UnitKiloBytes, 1)]
+        KiloBytes,
+        [UnitAttribute(CommandLine.UnitMegaBytes, 2)]
+        MegaBytes,
+        [UnitAttribute(CommandLine.UnitGigaBytes, 3)]
+        GigaBytes,
+        [UnitAttribute(CommandLine.UnitLines, 0)]
+        Lines
     }
 }

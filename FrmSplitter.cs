@@ -12,6 +12,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+using FileSplitter.Enums;
 using System;
 using System.Windows.Forms;
 
@@ -25,7 +26,7 @@ namespace FileSplitter {
         /// <summary>
         /// Spliter class. Do Split operations
         /// </summary>
-        private FileSplitter fileSplitter;
+        private FileSplitWorker fileSplitter;
 
         /// <summary>
         /// Start Components & assign events
@@ -44,17 +45,17 @@ namespace FileSplitter {
             this.lbEstimatedParts.Text = Properties.Resources.SPLINT_INFO_PARTS_DEF;
             this.Text = Properties.Resources.TITLE;
 
-            cmbUnits.Items.Add(new ComboboxItem("bytes", OPERATION_SPIT.BY_BYTE));
-            cmbUnits.Items.Add(new ComboboxItem("Kilobytes", OPERATION_SPIT.BY_KBYTE));
-            cmbUnits.Items.Add(new ComboboxItem("Megabytes", OPERATION_SPIT.BY_MBYTE));
-            cmbUnits.Items.Add(new ComboboxItem("Gigabytes", OPERATION_SPIT.BY_GBYTE));
-            cmbUnits.Items.Add(new ComboboxItem(Properties.Resources.CMB_LINES, OPERATION_SPIT.BY_LINES));
+            cmbUnits.Items.Add(new ComboboxItem("bytes", SplitUnit.Bytes));
+            cmbUnits.Items.Add(new ComboboxItem("Kilobytes", SplitUnit.KiloBytes));
+            cmbUnits.Items.Add(new ComboboxItem("Megabytes", SplitUnit.MegaBytes));
+            cmbUnits.Items.Add(new ComboboxItem("Gigabytes", SplitUnit.GigaBytes));
+            cmbUnits.Items.Add(new ComboboxItem(Properties.Resources.CMB_LINES, SplitUnit.Lines));
 
-            fileSplitter = new FileSplitter();
-            fileSplitter.start += new FileSplitter.StartHandler(fileSplitter_splitStart);
-            fileSplitter.finish += new FileSplitter.FinishHandler(fileSplitter_splitEnd);
-            fileSplitter.processing += new FileSplitter.ProcessHandler(fileSplitter_splitProcess);
-            fileSplitter.message += new FileSplitter.MessageHandler(fileSplitter_message);
+            fileSplitter = new FileSplitWorker();
+            fileSplitter.start += new FileSplitWorker.StartHandler(fileSplitter_splitStart);
+            fileSplitter.finish += new FileSplitWorker.FinishHandler(fileSplitter_splitEnd);
+            fileSplitter.processing += new FileSplitWorker.ProcessHandler(fileSplitter_splitProcess);
+            fileSplitter.message += new FileSplitWorker.MessageHandler(fileSplitter_message);
 
             cmbUnits.SelectedIndex = 2;
 
@@ -73,7 +74,7 @@ namespace FileSplitter {
         /// <param name="args">Paramaters of actual split</param>
         void fileSplitter_splitProcess(object sender, ProcessingArgs args) {
             lbSplitInfo.Text = String.Format(Properties.Resources.SPLITTING_FILE, args.FileName);
-            if (fileSplitter.OperationMode !=  OPERATION_SPIT.BY_LINES) {
+            if (fileSplitter.OperationMode != SplitUnit.Lines) {
                 progressBarFiles.Style = ProgressBarStyle.Continuous;
                 int percPart = Convert.ToInt32((args.Part * 100) / args.Parts);
                 if (percPart < progressBarFiles.Maximum) {
@@ -123,7 +124,7 @@ namespace FileSplitter {
             if (openFileDialog.ShowDialog() == DialogResult.OK) {
                 cmdStart.Enabled = true;
                 fileSplitter.FileName =  this.txtFile.Text = openFileDialog.FileName;
-                if (fileSplitter.OperationMode !=  OPERATION_SPIT.BY_LINES) {
+                if (fileSplitter.OperationMode != SplitUnit.Lines) {
                     lbEstimatedParts.Text = String.Format(Properties.Resources.SPLIT_INFO_PARTS, fileSplitter.Parts);
                 } else {
                     lbEstimatedParts.Text = Properties.Resources.NUMBER_OF_LINES;
@@ -143,7 +144,7 @@ namespace FileSplitter {
                 fileSplitter.OperationMode = ((ComboboxItem)cmbUnits.SelectedItem).Value;
             }
             fileSplitter.PartSize = Utils.unitConverter((Int64)numSize.Value, fileSplitter.OperationMode);
-            if (fileSplitter.OperationMode != OPERATION_SPIT.BY_LINES ){
+            if (fileSplitter.OperationMode != SplitUnit.Lines ){
                 lbEstimatedParts.Text = String.Format(Properties.Resources.SPLIT_INFO_PARTS, fileSplitter.Parts);
             } else {
                 lbEstimatedParts.Text = Properties.Resources.NUMBER_OF_LINES;

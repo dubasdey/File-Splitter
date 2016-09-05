@@ -17,6 +17,8 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using System.IO;
 using System.Runtime.InteropServices;
+using FileSplitter.Attributes;
+using FileSplitter.Enums;
 
 namespace FileSplitter {
 
@@ -48,116 +50,92 @@ namespace FileSplitter {
                 }
             }
         }
-
         /// <summary>
         /// Punto de entrada principal para la aplicación.
         /// </summary>
         [STAThread]
         static void Main(String[] args) {
             Console.Title = Application.ProductName +  " " + Application.ProductVersion + " Console Window";
-            CommandLine cmd = new CommandLine();
- 
-            if (args != null && args.Length > 1) {
-   
+            CommandLine cmd = new CommandLine(); 
+            if (args != null && args.Length > 1) {   
                 cmd.parseArguments(args);
-
-                if (cmd.hasKey("split")) {
-                    List<string> splitParams = cmd.getParamsOfKey("split");
+                if (cmd.hasKey(global::FileSplitter.CommandLine.SplitParameterCmd)) {
+                    List<string> splitParams = cmd.getParamsOfKey(CommandLine.SplitParameterCmd);
                     if (splitParams.Count < 3) {
                         Console.WriteLine("Missing parameter");
                         cmd.printUsageHelp();
                         Environment.Exit(1);  // return an ErrorLevel in case it is processed in a Batch file
                     } else {
-
                         // check size
                         Int64 size = 0;
-                        Boolean delete = false;
-                        string format = null;
-                        String destinationFolder = null;
-                        String outLogFile = null;
-                        OPERATION_SPIT mode = OPERATION_SPIT.BY_BYTE;
+                        bool delete = false;
+                        string format, destinationFolder, outLogFile;
+                        SplitUnit mode = SplitUnit.Bytes;
+                        string sizeParameter = splitParams[CommandLine.SizeParameterIndex], unitParameter = args[CommandLine.UnitParameterIndex], unitParameterLowered = unitParameter.ToLower();
 
                         // Check size
-                        try {
-                            size = Convert.ToInt64(splitParams[0]);
-                        } catch {
+                        if (!Int64.TryParse(sizeParameter, out size))
+                        {
                             Console.WriteLine("Invalid size");
                             cmd.printUsageHelp();
                             Environment.Exit(EXIT_CODE_FAIL);
                         }
 
+                        mode = UnitAttribute.Parse<SplitUnit>(unitParameterLowered);
 
-                        // check units
-                        if (args[2].ToLower() == "b") {
-                            mode = OPERATION_SPIT.BY_BYTE;
-                        } else if (args[2].ToLower() == "kb") {
-                            mode = OPERATION_SPIT.BY_KBYTE;
-                        } else if (args[2].ToLower() == "mb") {
-                            mode = OPERATION_SPIT.BY_MBYTE;
-                        } else if (args[2].ToLower() == "gb") {
-                            mode = OPERATION_SPIT.BY_GBYTE;
-                        } else if (args[2].ToLower() == "l") {
-                            mode = OPERATION_SPIT.BY_LINES;
-                        } else {
+                        if (mode == SplitUnit.Incorrect)
+                        {
                             Console.WriteLine("Invalid size unit");
                             cmd.printUsageHelp();
                             Environment.Exit(EXIT_CODE_FAIL);
                         }
+
                         size = Utils.unitConverter(size, mode);
 
                         // check delete original
-                        if (cmd.hasKey("d")) {
+                        if (cmd.hasKey(CommandLine.DeleteParameterCmd)) {
                             delete = true;
                         }
-
-                        // check format
-                        if (cmd.hasKey("f") ) {
-                            if (cmd.hasParams("f")) {
-                                format = cmd.getParamsOfKeyAsString("f");
-                            } else {
-                                Console.WriteLine("Invalid format");
-                                cmd.printUsageHelp();
-                                Environment.Exit(EXIT_CODE_FAIL);
+                        
+                        Func<string, string, string> extractKeyWhenSet = (string parameter, string errorMessage) =>
+                        {
+                            string result = null;
+                            if (cmd.hasKey(parameter))
+                            {
+                                if (cmd.hasParams(parameter))
+                                {
+                                    result = cmd.getParamsOfKeyAsString(parameter);
+                                }
+                                else {
+                                    Console.WriteLine(errorMessage);
+                                    cmd.printUsageHelp();
+                                    Environment.Exit(EXIT_CODE_FAIL);
+                                }
                             }
-                        }
+                            return result;
+                        };
 
+                        // Check format
+                        format = extractKeyWhenSet(CommandLine.FormatParameterCmd, "Invalid format");
                         // Check destination Folder
-                        if (cmd.hasKey("df")) {
-                            if (cmd.hasParams("df")) {
-                                destinationFolder = cmd.getParamsOfKeyAsString("df");
-                            } else {
-                                Console.WriteLine("Invalid destination");
-                                cmd.printUsageHelp();
-                                Environment.Exit(EXIT_CODE_FAIL);
-                            }
-                        }
-
+                        destinationFolder = extractKeyWhenSet(CommandLine.DestinationFolderParameterCmd, "Invalid destination");
                         // Check file to save names
-                        if (cmd.hasKey("lf")) {
-                            if (cmd.hasParams("lf")) {
-                                outLogFile = cmd.getParamsOfKeyAsString("lf");
-                            } else {
-                                Console.WriteLine("Invalid file");
-                                cmd.printUsageHelp();
-                                Environment.Exit(EXIT_CODE_FAIL);
-                            }
-                        }
-
+                        outLogFile = extractKeyWhenSet(CommandLine.LogFileParameterCmd, "Invalid file");
+                        
                         // check file exists
                         String fileName = args[3];
                         if (File.Exists(fileName)) {
-                            FileSplitter fs = new FileSplitter();
-                            fs.start += new FileSplitter.StartHandler(fs_splitStart);
-                            fs.finish += new FileSplitter.FinishHandler(fs_splitEnd);
-                            fs.processing += new FileSplitter.ProcessHandler(fs_splitProcess);
-                            fs.message += new FileSplitter.MessageHandler(fs_message);
+                            FileSplitWorker fs = new FileSplitWorker();
+                            fs.start += new FileSplitWorker.StartHandler(fs_splitStart);
+                            fs.finish += new FileSplitWorker.FinishHandler(fs_splitEnd);
+                            fs.processing += new FileSplitWorker.ProcessHandler(fs_splitProcess);
+                            fs.message += new FileSplitWorker.MessageHandler(fs_message);
                             fs.FileName = fileName;
                             fs.PartSize = size;
                             fs.OperationMode = mode;
                             fs.DeleteOriginalFile = delete;
                             fs.DestinationFolder = destinationFolder;
                             fs.GenerationLogFile = outLogFile;
-
                             if (format != null) {
                                 fs.FileFormatPattern = format;
                             }
@@ -184,26 +162,20 @@ namespace FileSplitter {
                 Environment.Exit(EXIT_CODE_OK);     // although there's not much point - the console window is no longer visible.  Does it need to be closed?
             }
         }
-
         static void fs_message(object server, MessageArgs args){
             Console.WriteLine(Utils.getMessageText(args.Message, args.Parameters));
         }
-
         static void fs_splitStart(){
             Console.WriteLine("Starting splitting operation");
-        }
-        
+        }        
         static void fs_splitProcess(object sender, ProcessingArgs args) {
             if (lastFile != args.FileName) {
                 lastFile = args.FileName;
                 Console.WriteLine("Writing " + lastFile);
             } 
         }
-
         static void fs_splitEnd() {
             Console.WriteLine("Done!");
         }
-
      }
 }
-

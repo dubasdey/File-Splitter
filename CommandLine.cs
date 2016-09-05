@@ -22,7 +22,19 @@ namespace FileSplitter {
     /// <summary>
     /// Commandline parser
     /// </summary>
-    internal class CommandLine {
+    internal class CommandLine
+    {
+        internal const int SizeParameterIndex = 0, UnitParameterIndex = 2;
+        internal const string SplitParameterCmd = "split";
+        internal const string DeleteParameterCmd = "d";
+        internal const string FormatParameterCmd = "f";
+        internal const string DestinationFolderParameterCmd = "df";
+        internal const string LogFileParameterCmd = "lf";
+        internal const string UnitBytes = "b";
+        internal const string UnitKiloBytes = "kb";
+        internal const string UnitMegaBytes = "mb";
+        internal const string UnitGigaBytes = "gb";
+        internal const string UnitLines = "l";
 
         /// <summary>
         /// Parameters collection
@@ -77,35 +89,34 @@ namespace FileSplitter {
             }
             return builder.ToString().TrimEnd();
         }
-
         public void printUsageHelp() {
             Console.WriteLine("Usage:");
-            Console.WriteLine("fsplit -split <size> <unit> <filePath> [-d] [-f <format>] [-df <folder>] [-lf <file>]");
+            Console.WriteLine($"fsplit -{SplitParameterCmd} <size> <unit> <filePath> [-{DeleteParameterCmd}] [-{FormatParameterCmd} <format>] [-{DestinationFolderParameterCmd} <folder>] [-{LogFileParameterCmd} <file>]");
             Console.WriteLine();
             Console.WriteLine("Parameter help:");
             Console.WriteLine();
-            Console.WriteLine("-split");
+            Console.WriteLine($"-{SplitParameterCmd}");
             Console.WriteLine("  size        Size of parts");
-            Console.WriteLine("                If size unit is 'l' defines number of lines");
+            Console.WriteLine($"                If size unit is '{UnitLines}' defines number of lines");
             Console.WriteLine("                in other case the size in the selected unit");
-            Console.WriteLine();
-            Console.WriteLine("  unit        unit of size 'b' 'kb 'mb' 'gb' 'l'");
-            Console.WriteLine("                b  - bytes");
-            Console.WriteLine("                kb - Kilobytes");
-            Console.WriteLine("                mb - megabytes");
-            Console.WriteLine("                gb - gigabytes");
-            Console.WriteLine("                l  - lines (based on endline detection)");
+            Console.WriteLine();//TODO: Retrieve units from the SplitUnit Attributes
+            Console.WriteLine($"  unit        unit of size '{UnitBytes}' '{UnitKiloBytes} '{UnitMegaBytes}' '{UnitGigaBytes}' '{UnitLines}'");
+            Console.WriteLine($"                {UnitBytes}  - bytes");
+            Console.WriteLine($"                {UnitKiloBytes} - Kilobytes");
+            Console.WriteLine($"                {UnitMegaBytes} - megabytes");
+            Console.WriteLine($"                {UnitGigaBytes} - gigabytes");
+            Console.WriteLine($"                {UnitLines}  - lines (based on endline detection)");
             Console.WriteLine();
             Console.WriteLine("  filePath    Path of the file to be split.");
             Console.WriteLine();
-            Console.WriteLine(" -d           Delete the original file if the process is done.");
+            Console.WriteLine($" -{DeleteParameterCmd}           Delete the original file if the process is done.");
             Console.WriteLine();
-            Console.WriteLine(" -df <folder>");
+            Console.WriteLine($" -{DestinationFolderParameterCmd} <folder>");
             Console.WriteLine("              Set destination folder for files.");
-            Console.WriteLine(" -lf <file>");
+            Console.WriteLine($" -{LogFileParameterCmd} <file>");
             Console.WriteLine("              Set a file to store generated names.");
             Console.WriteLine();
-            Console.WriteLine(" -f <format>  Use a custom format using pattern replacements");
+            Console.WriteLine($" -{FormatParameterCmd} <format>  Use a custom format using pattern replacements");
             Console.WriteLine("               {0} the current part");
             Console.WriteLine("               {1} number of parts");
             Console.WriteLine();

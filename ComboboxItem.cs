@@ -12,19 +12,19 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+using FileSplitter.Enums;
 using System;
 
 namespace FileSplitter {
 
     internal class ComboboxItem {
 
-        public ComboboxItem(String text, OPERATION_SPIT key) {
+        public ComboboxItem(String text, SplitUnit key) {
             this.Text = text;
             this.Value = Value;
         }
         public string Text { get; set; }
-        public OPERATION_SPIT Value { get; set; }
-
+        public SplitUnit Value { get; set; }
         public override string ToString() {
             return Text;
         }
