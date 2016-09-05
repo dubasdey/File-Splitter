@@ -14,14 +14,13 @@
 */
 using FileSplitter.Attributes;
 
-namespace FileSplitter.Enums
-{
+namespace FileSplitter.Enums {
     /// <summary>
     /// The unit of how to split the files
     /// </summary>
     /// <created>Nick</created>
-    internal enum SplitUnit
-    {
+    internal enum SplitUnit {
+
         /// <summary>
         /// Specify an incorrect entry to allow the reflection-based parser to return 
         /// default(T) without additional constructors and wrappers.

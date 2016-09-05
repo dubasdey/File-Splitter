@@ -14,27 +14,37 @@
 */
 using System;
 namespace FileSplitter {
+
+    /// <summary>
+    /// Arguments to use in File Splitter events
+    /// </summary>
     internal class ProcessingArgs : EventArgs {
+
         /// <summary>
         /// File Name
         /// </summary>
         public String FileName { get; private set; } = String.Empty;
+
         /// <summary>
         /// Part number of total parts
         /// </summary>
         public Int64 Part { get; private set; } = 0;
+
         /// <summary>
         /// Partsize Written
         /// </summary>
         public Int64 PartSizeWritten { get; private set; } = 0;
+
         /// <summary>
         /// Total parts
         /// </summary>
         public Int64 Parts { get; private set; }
+
         /// <summary>
         /// Size in bytes of each part
         /// </summary>
         public Int64 PartSize { get; private set; }
+
         /// <summary>
         /// Argument constructor
         /// </summary>

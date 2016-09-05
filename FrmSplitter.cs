@@ -45,11 +45,11 @@ namespace FileSplitter {
             this.lbEstimatedParts.Text = Properties.Resources.SPLINT_INFO_PARTS_DEF;
             this.Text = Properties.Resources.TITLE;
 
-            cmbUnits.Items.Add(new ComboboxItem("bytes", SplitUnit.Bytes));
-            cmbUnits.Items.Add(new ComboboxItem("Kilobytes", SplitUnit.KiloBytes));
-            cmbUnits.Items.Add(new ComboboxItem("Megabytes", SplitUnit.MegaBytes));
-            cmbUnits.Items.Add(new ComboboxItem("Gigabytes", SplitUnit.GigaBytes));
-            cmbUnits.Items.Add(new ComboboxItem(Properties.Resources.CMB_LINES, SplitUnit.Lines));
+            cmbUnits.Items.Add(new SplitUnitComboboxItem("bytes", SplitUnit.Bytes));
+            cmbUnits.Items.Add(new SplitUnitComboboxItem("Kilobytes", SplitUnit.KiloBytes));
+            cmbUnits.Items.Add(new SplitUnitComboboxItem("Megabytes", SplitUnit.MegaBytes));
+            cmbUnits.Items.Add(new SplitUnitComboboxItem("Gigabytes", SplitUnit.GigaBytes));
+            cmbUnits.Items.Add(new SplitUnitComboboxItem(Properties.Resources.CMB_LINES, SplitUnit.Lines));
 
             fileSplitter = new FileSplitWorker();
             fileSplitter.start += new FileSplitWorker.StartHandler(fileSplitter_splitStart);
@@ -141,7 +141,7 @@ namespace FileSplitter {
         private void controlValueChangedEvent(object sender, EventArgs e) {
             updatePreferences();
             if (cmbUnits.SelectedItem != null) {
-                fileSplitter.OperationMode = ((ComboboxItem)cmbUnits.SelectedItem).Value;
+                fileSplitter.OperationMode = ((SplitUnitComboboxItem)cmbUnits.SelectedItem).Value;
             }
             fileSplitter.PartSize = Utils.unitConverter((Int64)numSize.Value, fileSplitter.OperationMode);
             if (fileSplitter.OperationMode != SplitUnit.Lines ){
@@ -166,7 +166,7 @@ namespace FileSplitter {
         private void loadPreferences() {
             cmbUnits.SelectedIndex = Properties.Settings.Default.typeIndex;
             numSize.Value = Properties.Settings.Default.itemsNumber;
-            fileSplitter.OperationMode = ((ComboboxItem)cmbUnits.SelectedItem).Value;
+            fileSplitter.OperationMode = ((SplitUnitComboboxItem)cmbUnits.SelectedItem).Value;
             fileSplitter.PartSize = Utils.unitConverter((Int64)numSize.Value, fileSplitter.OperationMode);
         }
 

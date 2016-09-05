@@ -22,9 +22,12 @@ namespace FileSplitter {
     /// <summary>
     /// Commandline parser
     /// </summary>
-    internal class CommandLine
-    {
-        internal const int SizeParameterIndex = 0, UnitParameterIndex = 2;
+    internal class CommandLine {
+
+
+        internal const int SizeParameterIndex = 0;
+        internal const int UnitParameterIndex = 2;
+
         internal const string SplitParameterCmd = "split";
         internal const string DeleteParameterCmd = "d";
         internal const string FormatParameterCmd = "f";
@@ -69,6 +72,11 @@ namespace FileSplitter {
             return parameters.ContainsKey(key);
         }
 
+        /// <summary>
+        /// Detect if key exists with parameters
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public Boolean hasParams(string key) {
             return (parameters[key].Count > 0);
         }
@@ -82,6 +90,11 @@ namespace FileSplitter {
             return parameters[key];
         }
 
+        /// <summary>
+        /// Get all parameters of key as string with spaces
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public String getParamsOfKeyAsString(string key) {
             StringBuilder builder = new StringBuilder();
             foreach (string s in parameters[key]) {
@@ -89,6 +102,10 @@ namespace FileSplitter {
             }
             return builder.ToString().TrimEnd();
         }
+
+        /// <summary>
+        /// Prints usage help
+        /// </summary>
         public void printUsageHelp() {
             Console.WriteLine("Usage:");
             Console.WriteLine($"fsplit -{SplitParameterCmd} <size> <unit> <filePath> [-{DeleteParameterCmd}] [-{FormatParameterCmd} <format>] [-{DestinationFolderParameterCmd} <folder>] [-{LogFileParameterCmd} <file>]");

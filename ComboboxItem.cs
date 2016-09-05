@@ -17,14 +17,30 @@ using System;
 
 namespace FileSplitter {
 
-    internal class ComboboxItem {
+    /// <summary>
+    /// Item to use in a ComboBox 
+    /// </summary>
+    internal class SplitUnitComboboxItem {
 
-        public ComboboxItem(String text, SplitUnit key) {
+        public SplitUnitComboboxItem(String text, SplitUnit key) {
             this.Text = text;
             this.Value = Value;
         }
+
+        /// <summary>
+        /// Text for item
+        /// </summary>
         public string Text { get; set; }
+
+        /// <summary>
+        /// Real value of item
+        /// </summary>
         public SplitUnit Value { get; set; }
+
+        /// <summary>
+        /// To String
+        /// </summary>
+        /// <returns></returns>
         public override string ToString() {
             return Text;
         }

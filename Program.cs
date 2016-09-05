@@ -27,17 +27,43 @@ namespace FileSplitter {
     /// </summary>
     static class Program {
 		
+        /// <summary>
+        /// OK Exit code (To use with command line exit codes)
+        /// </summary>
 		private static Int32 EXIT_CODE_OK= 0;
+
+        /// <summary>
+        /// Failed Exit code (To use with command line exit codes)
+        /// </summary>
 		private static Int32 EXIT_CODE_FAIL= 1;
 		
+        /// <summary>
+        /// Call to User32.dll Search for window
+        /// </summary>
+        /// <param name="lpClassName"></param>
+        /// <param name="lpWindowName"></param>
+        /// <returns></returns>
         [DllImport("user32.dll")]
         public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
 
+        /// <summary>
+        /// Call to user32.ddl allow to show or hide a window
+        /// </summary>
+        /// <param name="hWnd"></param>
+        /// <param name="nCmdShow"></param>
+        /// <returns></returns>
         [DllImport("user32.dll")]
         static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
 
+        /// <summary>
+        /// Last file used
+        /// </summary>
         private static String lastFile = "";
 
+        /// <summary>
+        /// Change the Visibility of a Command line console
+        /// </summary>
+        /// <param name="visible"></param>
         private static void setConsoleWindowVisibility(bool visible) {
             IntPtr hWnd = FindWindow(null, Console.Title);
             if (hWnd != IntPtr.Zero) {
@@ -50,8 +76,10 @@ namespace FileSplitter {
                 }
             }
         }
+
+
         /// <summary>
-        /// Punto de entrada principal para la aplicación.
+        /// Application entry Point 
         /// </summary>
         [STAThread]
         static void Main(String[] args) {
@@ -64,7 +92,9 @@ namespace FileSplitter {
                     if (splitParams.Count < 3) {
                         Console.WriteLine("Missing parameter");
                         cmd.printUsageHelp();
-                        Environment.Exit(1);  // return an ErrorLevel in case it is processed in a Batch file
+
+                        // return an ErrorLevel in case it is processed in a Batch file
+                        Environment.Exit(EXIT_CODE_FAIL );  
                     } else {
                         // check size
                         Int64 size = 0;
@@ -74,8 +104,7 @@ namespace FileSplitter {
                         string sizeParameter = splitParams[CommandLine.SizeParameterIndex], unitParameter = args[CommandLine.UnitParameterIndex], unitParameterLowered = unitParameter.ToLower();
 
                         // Check size
-                        if (!Int64.TryParse(sizeParameter, out size))
-                        {
+                        if (!Int64.TryParse(sizeParameter, out size)) {
                             Console.WriteLine("Invalid size");
                             cmd.printUsageHelp();
                             Environment.Exit(EXIT_CODE_FAIL);
@@ -83,8 +112,7 @@ namespace FileSplitter {
 
                         mode = UnitAttribute.Parse<SplitUnit>(unitParameterLowered);
 
-                        if (mode == SplitUnit.Incorrect)
-                        {
+                        if (mode == SplitUnit.Incorrect) {
                             Console.WriteLine("Invalid size unit");
                             cmd.printUsageHelp();
                             Environment.Exit(EXIT_CODE_FAIL);
@@ -97,16 +125,12 @@ namespace FileSplitter {
                             delete = true;
                         }
                         
-                        Func<string, string, string> extractKeyWhenSet = (string parameter, string errorMessage) =>
-                        {
+                        Func<string, string, string> extractKeyWhenSet = (string parameter, string errorMessage) => {
                             string result = null;
-                            if (cmd.hasKey(parameter))
-                            {
-                                if (cmd.hasParams(parameter))
-                                {
+                            if (cmd.hasKey(parameter)) {
+                                if (cmd.hasParams(parameter)) {
                                     result = cmd.getParamsOfKeyAsString(parameter);
-                                }
-                                else {
+                                } else {
                                     Console.WriteLine(errorMessage);
                                     cmd.printUsageHelp();
                                     Environment.Exit(EXIT_CODE_FAIL);
@@ -140,14 +164,16 @@ namespace FileSplitter {
                                 fs.FileFormatPattern = format;
                             }
                             fs.doSplit();
-                            Environment.Exit(EXIT_CODE_OK);       // return an ErrorLevel indicating successful launch
+
+                            Environment.Exit(EXIT_CODE_OK);       
                         } else {
                             Console.WriteLine("File does not exist");
                             cmd.printUsageHelp();
                             Environment.Exit(EXIT_CODE_FAIL);
                         }
                     }
-                    /* TODO JOIN */
+
+                /* TODO JOIN */
                 } else {
                     Console.WriteLine("Unrecognized Command");
                     cmd.printUsageHelp();
@@ -159,21 +185,43 @@ namespace FileSplitter {
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
                 Application.Run(new FrmSplitter());
-                Environment.Exit(EXIT_CODE_OK);     // although there's not much point - the console window is no longer visible.  Does it need to be closed?
+
+                Environment.Exit(EXIT_CODE_OK);
             }
         }
+
+        /// <summary>
+        /// Handler for event in FileSplitWorker, Message from process
+        /// </summary>
+        /// <param name="server"></param>
+        /// <param name="args"></param>
         static void fs_message(object server, MessageArgs args){
             Console.WriteLine(Utils.getMessageText(args.Message, args.Parameters));
         }
+
+        /// <summary>
+        /// Handler for event in FileSplitWorker, Process start
+        /// </summary>
         static void fs_splitStart(){
             Console.WriteLine("Starting splitting operation");
-        }        
+        }
+
+        /// <summary>
+        /// Handler for event in FileSplitWorker, Process in execution
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
+
         static void fs_splitProcess(object sender, ProcessingArgs args) {
             if (lastFile != args.FileName) {
                 lastFile = args.FileName;
                 Console.WriteLine("Writing " + lastFile);
             } 
         }
+
+        /// <summary>
+        /// Handler for event in FileSplitWorker, Process End
+        /// </summary>
         static void fs_splitEnd() {
             Console.WriteLine("Done!");
         }

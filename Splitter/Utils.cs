@@ -64,22 +64,22 @@ namespace FileSplitter
             }
             return result;
         }
-        public static String getMessageText(ExceptionsMessages msg,params Object[] args) {
+        public static String getMessageText(ExceptionMessage msg,params Object[] args) {
             String message;
             switch (msg) {
-                case ExceptionsMessages.ERROR_FILESYSTEM_NOTALLOW_SIZE:
+                case ExceptionMessage.ERROR_FILESYSTEM_NOTALLOW_SIZE:
                     message = String.Format(Properties.Resources.ERROR_FILESYSTEM_NOTALLOW_SIZE, args);
                     break;
-                case ExceptionsMessages.ERROR_MINIMUN_PART_SIZE:
+                case ExceptionMessage.ERROR_MINIMUN_PART_SIZE:
                     message = string.Format(Properties.Resources.ERROR_MINIMUN_PART_SIZE, args);
                     break;
-                case ExceptionsMessages.ERROR_NO_SPACE_TO_SPLIT:
+                case ExceptionMessage.ERROR_NO_SPACE_TO_SPLIT:
                     message = Properties.Resources.ERROR_NO_SPACE_TO_SPLIT;
                     break;
-                case ExceptionsMessages.ERROR_OPENING_FILE:
+                case ExceptionMessage.ERROR_OPENING_FILE:
                     message = String.Format(Properties.Resources.ERROR_OPENING_FILE, args);
                     break;
-                case ExceptionsMessages.ERROR_TOTALSIZE_NOTEQUALS:
+                case ExceptionMessage.ERROR_TOTALSIZE_NOTEQUALS:
                     message = Properties.Resources.ERROR_TOTALSIZE_NOTEQUALS;
                     break;
                 default:
@@ -88,16 +88,16 @@ namespace FileSplitter
             }
             return message;
         }
-        public static MessageBoxIcon getMessageIcon(ExceptionsMessages msg) {
+        public static MessageBoxIcon getMessageIcon(ExceptionMessage msg) {
             MessageBoxIcon icon;
             switch (msg) {
-                case ExceptionsMessages.ERROR_NO_SPACE_TO_SPLIT:
-                case ExceptionsMessages.ERROR_OPENING_FILE:
+                case ExceptionMessage.ERROR_NO_SPACE_TO_SPLIT:
+                case ExceptionMessage.ERROR_OPENING_FILE:
                     icon = MessageBoxIcon.Hand;
                     break;
-                case ExceptionsMessages.ERROR_FILESYSTEM_NOTALLOW_SIZE:
-                case ExceptionsMessages.ERROR_MINIMUN_PART_SIZE:
-                case ExceptionsMessages.ERROR_TOTALSIZE_NOTEQUALS:
+                case ExceptionMessage.ERROR_FILESYSTEM_NOTALLOW_SIZE:
+                case ExceptionMessage.ERROR_MINIMUN_PART_SIZE:
+                case ExceptionMessage.ERROR_TOTALSIZE_NOTEQUALS:
                     icon = MessageBoxIcon.Error;
                     break;
                 default:

@@ -23,14 +23,14 @@ namespace FileSplitter {
     	/// <summary>
     	/// Message to show
     	/// </summary>
-        public ExceptionsMessages Message { get; set; }        
+        public ExceptionMessage Message { get; set; }        
         public Object[] Parameters { get; set; }
         /// <summary>
         /// Constructor for the message
         /// </summary>
         /// <param name="message"></param>
         /// <param name="type"></param>
-        public MessageArgs(ExceptionsMessages message, Object[] parameters) {
+        public MessageArgs(ExceptionMessage message, Object[] parameters) {
             this.Message = message;
             this.Parameters = parameters;
         }
