@@ -14,3 +14,4 @@ hs_err_pid*
 # exclude bin and obj directories
 [Bb][Ii][Nn]
 [Oo][Bb][Jj]
+/.vs/FileSplitter/v14
