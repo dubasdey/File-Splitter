@@ -101,7 +101,8 @@ namespace FileSplitter {
                         bool delete = false;
                         string format, destinationFolder, outLogFile;
                         SplitUnit mode = SplitUnit.Bytes;
-                        string sizeParameter = splitParams[CommandLine.SizeParameterIndex], unitParameter = args[CommandLine.UnitParameterIndex], unitParameterLowered = unitParameter.ToLower();
+                        string sizeParameter = splitParams[CommandLine.SizeParameterIndex];
+                        string unitParameterLowered = args[CommandLine.UnitParameterIndex].ToLower();
 
                         // Check size
                         if (!Int64.TryParse(sizeParameter, out size)) {
@@ -141,8 +142,10 @@ namespace FileSplitter {
 
                         // Check format
                         format = extractKeyWhenSet(CommandLine.FormatParameterCmd, "Invalid format");
+                        
                         // Check destination Folder
                         destinationFolder = extractKeyWhenSet(CommandLine.DestinationFolderParameterCmd, "Invalid destination");
+                       
                         // Check file to save names
                         outLogFile = extractKeyWhenSet(CommandLine.LogFileParameterCmd, "Invalid file");
                         

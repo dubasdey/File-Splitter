@@ -18,7 +18,7 @@ namespace FileSplitter {
     /// <summary>
     /// Arguments to use in File Splitter events
     /// </summary>
-    internal class ProcessingArgs : EventArgs {
+    public class ProcessingArgs : EventArgs {
 
         /// <summary>
         /// File Name

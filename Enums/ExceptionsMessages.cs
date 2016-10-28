@@ -23,7 +23,7 @@ namespace FileSplitter.Enums {
     /// <summary>
     /// Exception message types
     /// </summary>
-    internal enum ExceptionMessage {
+    public enum ExceptionMessage {
 
         /// <summary>
         /// Part size minimun error

@@ -19,7 +19,7 @@ namespace FileSplitter.Enums {
     /// The unit of how to split the files
     /// </summary>
     /// <created>Nick</created>
-    internal enum SplitUnit {
+    public enum SplitUnit {
 
         /// <summary>
         /// Specify an incorrect entry to allow the reflection-based parser to return 

@@ -21,7 +21,7 @@ namespace FileSplitter.Attributes {
     /// Class to help out with units
     /// </summary>
     /// <created>Nick</created>
-    public class UnitAttribute : System.Attribute {
+    public class UnitAttribute : Attribute {
 
         /// <summary>
         /// The step size to factor computer sizes

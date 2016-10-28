@@ -28,7 +28,7 @@ namespace FileSplitter {
     /// <remarks>
     /// Renamed class to prevent conflicts and prevent having to use global::
     /// </remarks>
-    internal class FileSplitWorker {
+    public class FileSplitWorker {
 
         /// <summary>
         /// Default buffer size

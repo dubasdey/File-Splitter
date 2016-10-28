@@ -19,9 +19,9 @@ using System.IO;
 using System.Text;
 using System.Windows.Forms;
 
-namespace FileSplitter
-{
-    internal abstract class Utils {
+namespace FileSplitter {
+
+    public abstract class Utils {
         /// <summary>
         /// Detects the byte order mark of a file and returns
         /// an appropriate encoding for the file.

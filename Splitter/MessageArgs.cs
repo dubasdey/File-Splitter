@@ -19,7 +19,7 @@ namespace FileSplitter {
     /// <summary>
     /// Arguments for Split message
     /// </summary>
-    internal class MessageArgs : EventArgs {
+    public class MessageArgs : EventArgs {
     	/// <summary>
     	/// Message to show
     	/// </summary>

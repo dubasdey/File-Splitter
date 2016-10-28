@@ -13,5 +13,5 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 namespace FileSplitter.Exceptions {
-    internal class SplitFailedException : System.Exception { }
+    public class SplitFailedException : System.Exception { }
 }
