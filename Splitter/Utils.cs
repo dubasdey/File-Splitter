@@ -58,9 +58,15 @@ namespace FileSplitter
         /// <returns></returns>
         public static Int64 unitConverter(Int64 items, SplitUnit units) {
             Int64 result = items;
-            var info = UnitAttribute.GetFromField<SplitUnit>(units);
-            if (info.Factor > 0) {
-                result = (Int64)Math.Ceiling(items * info.CalculatedFactor);
+            // Make sure to check if it's something valid we can split
+            if (units != SplitUnit.Incorrect)
+            {
+                var info = UnitAttribute.GetFromField<SplitUnit>(units);
+                // If the GetFromField fails; make sure to test it's not null
+                if (info != null && info.Factor > 0)
+                {
+                    result = (Int64)Math.Ceiling(items * info.CalculatedFactor);
+                }
             }
             return result;
         }
