@@ -15,3 +15,10 @@ hs_err_pid*
 [Bb][Ii][Nn]
 [Oo][Bb][Jj]
 /.vs/FileSplitter/v14
+FileSplitter/Test/100K.txt
+FileSplitter/Test/10K.txt
+FileSplitter/Test/1M.txt
+FileSplitter/Test/10M.txt
+FileSplitter/Test/100M.txt
+FileSplitter/Test/1G.txt
+FileSplitter/Test/10G.txt

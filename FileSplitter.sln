@@ -5,8 +5,6 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileSplitter", "FileSplitter\FileSplitter.csproj", "{971237ED-415D-4AB0-8CF9-C5571D644503}"
 EndProject
-#Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileSplitterTest", "FileSplitterTest\FileSplitterTest.csproj", "{136890EF-B420-4842-8113-B8E8BEBC6964}"
-#EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{78B43C7B-31EE-4CB9-AB0D-8F17B60B015B}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
@@ -30,7 +28,7 @@ Global
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
-#	GlobalSection(ExtensibilityGlobals) = postSolution
-#		RESX_AutoCreateNewLanguageFiles = True
-#	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		RESX_AutoCreateNewLanguageFiles = True
+	EndGlobalSection
 EndGlobal
