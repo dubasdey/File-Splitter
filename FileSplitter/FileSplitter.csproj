@@ -15,7 +15,7 @@
     <ApplicationIcon>app.ico</ApplicationIcon>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
     <DelaySign>False</DelaySign>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
     <AllowUnsafeBlocks>False</AllowUnsafeBlocks>

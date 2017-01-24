@@ -1,5 +1,7 @@
 language: csharp
 solution: FileSplitter.sln
+mono:
+	- latest
 before_deploy:
  - cd bin/Release/
  - zip FileSplitter.zip fSplit.exe fSplit.exe.config ../../changelog.txt ../../LICENSE ../../README.md
