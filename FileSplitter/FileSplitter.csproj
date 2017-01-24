@@ -76,9 +76,6 @@
   <PropertyGroup>
     <StartupObject>FileSplitter.Program</StartupObject>
   </PropertyGroup>
-  <PropertyGroup>
-    <AssemblyOriginatorKeyFile>FileSplitter.pfx</AssemblyOriginatorKeyFile>
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
@@ -123,7 +120,6 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <None Include="app.config" />
-    <None Include="FileSplitter.pfx" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
