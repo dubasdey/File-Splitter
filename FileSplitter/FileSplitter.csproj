@@ -101,8 +101,6 @@
     <Compile Include="Exceptions\SplitFailedException.cs" />
     <Compile Include="Splitter\Utils.cs" />
     <Compile Include="Attributes\UnitAttribute.cs" />
-    <Content Include="Test\test_256.txt" />
-    <Content Include="Test\test_28.txt" />
     <EmbeddedResource Include="FrmSplitter.resx">
       <DependentUpon>FrmSplitter.cs</DependentUpon>
     </EmbeddedResource>

@@ -1,6 +1,4 @@
-REM @echo off
-
-echo Building files to test
+@echo off
 
 REM Recreate test files
 
@@ -29,49 +27,62 @@ IF NOT EXIST 100M.txt (
 	copy /Y /B 10M.txt+10M.txt+10M.txt+10M.txt+10M.txt+10M.txt+10M.txt+10M.txt+10M.txt+10M.txt /B 100M.txt
 )
 
+IF NOT EXIST 900M.txt (	
+	echo 900Mb File
+	copy /Y /B 100M.txt+100M.txt+100M.txt+100M.txt+100M.txt+100M.txt+100M.txt+100M.txt+100M.txt /B 900M.txt
+)
+
+
 IF NOT EXIST 1G.txt (	
 	echo 1GB File
 	copy /Y /B 100M.txt+100M.txt+100M.txt+100M.txt+100M.txt+100M.txt+100M.txt+100M.txt+100M.txt+100M.txt+10M.txt+10M.txt+1M.txt+1M.txt+1M.txt+1M.txt /B 1G.txt
 )
 
 IF NOT EXIST 10G.txt (	
-	echo 10 GB File (Non FAT32 working)
+	echo 10 GB File
 	copy /Y /B 1G.txt+1G.txt+1G.txt+1G.txt+1G.txt+1G.txt+1G.txt+1G.txt+1G.txt+1G.txt /B 10G.txt
 )
 
-REM Create directories
-for /l %x in (1, 1, 10) do (
-IF NOT EXIST result%%x (	
-	echo Creating directory result%%x
-	md result%%x
+SET FS=..\bin\Release\fSplit.exe
+
+IF NOT EXIST result1 (	
+	echo 100 Kb to 1 Kb files
+	md result1
+	%FS% -split 1 kb 100K.txt -df result1
+)
+IF NOT EXIST result2 (	
+	echo 1 Mb to 100 Kb files
+	md result2
+	%FS% -split 100 kb 1M.txt -df result2
 )
 
+IF NOT EXIST result3 (	
+	echo 10 Mb to 100 Kb files
+	md result3
+	%FS% -split 100 kb 10M.txt -df result3
+)
 
-SET FS =..\bin\Release\fSplit.exe
+IF NOT EXIST result4 (	
+	echo 100 MB to 1 Mb files
+	md result4
+	%FS% -split 1 Mb 100M.txt -df result4
+)
 
-echo 100 Kb to 1 Kb files
-%FS% -split 1 kb 100K.txt -df result1
+IF NOT EXIST result5 (	
+	echo 1 GB to 10 Mb files
+	md result5
+	%FS% -split 10 Mb 1G.txt -df result5
+)
 
-echo 1 Mb to 100 Kb files
-%FS% -split 100 kb 1M.txt -df result2
+IF NOT EXIST result6 (	
+	echo 10 GB to 100 Mb files
+	md result6
+	%FS% -split 100 Mb 10G.txt -df result6
+)
 
-echo 10 Mb to 100 Kb files
-%FS% -split 100 kb 10M.txt -df result3
+IF NOT EXIST result7 (	
+	echo 900 Mb to 10 Mb files
+	md result7
+	%FS% -split 10 Mb 900M.txt -df result7
+)
 
-echo 100 MB to 1 Mb files
-%FS% -split 1 Mb 100M.txt -df result4
-
-echo 1 GB to 10 Mb files
-%FS% -split 10 Mb 1G.txt -df result5
-
-echo 10 GB to 100 Mb files
-%FS% -split 100 Mb 10G.txt -df result6
-
-
-REM copy 256.txt toDelete_256.txt
-REM ..\bin\Debug\fSplit.exe -split 1 kb toDelete_256.txt -d -f sp_{0:0000}_of_{1:0000}.txt -df result -lf files.txt
-
-
-REM echo TEST2
-REM copy 28.txt toDelete28.txt 
-REM ..\bin\Debug\fSplit.exe -split 4 kb toDelete28.txt -df result
