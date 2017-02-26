@@ -22,9 +22,14 @@ namespace FileSplitter {
     /// </summary>
     internal class SplitUnitComboboxItem {
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="text">Associated text</param>
+        /// <param name="key">SplitUnit</param>
         public SplitUnitComboboxItem(String text, SplitUnit key) {
             this.Text = text;
-            this.Value = Value;
+            this.Value = key;
         }
 
         /// <summary>

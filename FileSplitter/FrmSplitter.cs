@@ -59,7 +59,6 @@ namespace FileSplitter {
 
             cmbUnits.SelectedIndex = 2;
 
-
             loadPreferences();
         }
 

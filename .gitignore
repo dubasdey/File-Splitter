@@ -1,20 +1,7 @@
-*.class
-
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
-
-# Package Files #
-*.jar
-*.war
-*.ear
-
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
 
 # exclude bin and obj directories
 [Bb][Ii][Nn]
 [Oo][Bb][Jj]
-/.vs/FileSplitter/v14
-FileSplitter/Test/*.txt
+/.vs/
 FileSplitter/Test/**/*.txt
 FileSplitter/FileSplitter.csproj.user
