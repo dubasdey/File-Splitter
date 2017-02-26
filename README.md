@@ -27,6 +27,14 @@ example:
 	console_2(3).log
 	console_3(3).log
 
+## Download
+-----------------------------------------------------------------------------------------
+
+Download the last release from [GitHub Relases](https://github.com/dubasdey/File-Splitter/releases) or 
+from SourceForge. 
+
+SourceForge downloads may not be up-to-date with the latest version of GitHub.
+
 
 ## How To Use	
 -----------------------------------------------------------------------------------------
