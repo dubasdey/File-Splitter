@@ -131,6 +131,8 @@ namespace FileSplitter {
         /// </summary>
         public SplitUnit OperationMode { get; set; }
 
+        private Int32 partsCache;
+
         /// <summary>
         /// Calculates number of parts, based on size of file a part size
         /// </summary>
@@ -138,18 +140,25 @@ namespace FileSplitter {
         // relies on other code to ensure file name exists
         public Int32 Parts {
             get {
-                Int32 parts = 0;
-                if (OperationMode != SplitUnit.Lines) {
+                if (partsCache < 1) {
                     if (this.FileName != null && this.FileName.Length > 0 && File.Exists(this.FileName)) {
-                        FileInfo fi = new FileInfo(this.FileName);
-                        if (fi.Length > this.PartSize) {
-                            parts = (Int32)Math.Ceiling((double)fi.Length / this.PartSize);
+                        double items = 0;
+                        if (OperationMode != SplitUnit.Lines) {
+                            FileInfo fi = new FileInfo(this.FileName);
+                            if (fi.Length > this.PartSize) {
+                                items = fi.Length;
+                            } 
                         } else {
-                            parts = 1;
+                            // Detect number of lines
+                            items = getNumberOfLines(this.FileName);
                         }
+                        partsCache = (Int32)Math.Ceiling(items / this.PartSize);
                     }
                 }
-                return parts;
+                return partsCache;
+            }
+            set {
+                partsCache = value;
             }
         }
 
@@ -243,12 +252,31 @@ namespace FileSplitter {
         }
 
         /// <summary>
+        /// Detects the total number of lines
+        /// </summary>
+        /// <param name="inputFileName"></param>
+        /// <returns></returns>
+        private Int64 getNumberOfLines(String inputFileName) {
+            StreamReader inputReader = new StreamReader(inputFileName, true);
+            Int64 linesReaded = 0;
+            String line = "";
+            do {
+                line = inputReader.ReadLine();
+                linesReaded++;
+            } while (line != null);
+            inputReader.Close();
+            return linesReaded;
+        }
+
+
+        /// <summary>
         /// Split file by number of lines
         /// </summary>
         /// <param name="inputFileName"></param>
         /// <param name="fileNameInfo"></param>
         /// <param name="sourceFileSize"></param>
         private void splitByLines(String inputFileName, Int64 sourceFileSize) {
+
 
             // File Pattern
             Int64 actualFileNumber = 1;
