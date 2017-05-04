@@ -424,6 +424,10 @@ namespace FileSplitter {
         /// </summary>
         public void doSplit() {
             try {
+                // initializa variables
+                partsCache = 0;
+
+                // Set start event
                 onStart();
 
                 FileInfo fileNameInfo = new FileInfo(this.FileName);
