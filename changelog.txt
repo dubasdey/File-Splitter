@@ -1,5 +1,12 @@
 ﻿FileSplitter Changelog
 ===============================================================
+FileSplitter 1.4.0 2017-05-20
+-------------------------------------------------------------
+FIXED: #19 Number of parts not recalculated
+FIXED: #18 Need destination folder selector
+FIXED: #7  Splitting by line numbers names all files (0)
+FIXED: #12 My files are half the size they should be! 
+
 
 FileSplitter 1.4.0 2017-02-27
 -------------------------------------------------------------
