@@ -146,6 +146,7 @@ namespace FileSplitter {
                         // Check destination Folder
                         destinationFolder = extractKeyWhenSet(CommandLine.DestinationFolderParameterCmd, "Invalid destination");
                        
+                        
                         // Check file to save names
                         outLogFile = extractKeyWhenSet(CommandLine.LogFileParameterCmd, "Invalid file");
                         

@@ -30,6 +30,8 @@ namespace FileSplitter {
     /// </remarks>
     public class FileSplitWorker {
 
+        #region Buffer and size constants
+
         /// <summary>
         /// Default buffer size
         /// </summary>
@@ -55,6 +57,8 @@ namespace FileSplitter {
         /// </summary>
         static readonly Int32 MINIMUM_PART_SIZE = BUFFER_SIZE;
 
+        #endregion
+
         #region File System related limits
 
         const string DriveFormat_FAT12 = "FAT12";
@@ -71,7 +75,9 @@ namespace FileSplitter {
         const string DriveFormat_FAT32_FactorName = "Gb";
 
         #endregion
-        
+
+        #region Delegates and events 
+
         /// <summary>
         /// Delegate for Split start
         /// </summary>
@@ -116,10 +122,44 @@ namespace FileSplitter {
         /// </summary>
         public event MessageHandler message;
 
+        #endregion
+
+        #region Private variables 
+
+        /// <summary>
+        /// Stores the numbers of partes calculated if the partSize o unit is not changed
+        /// to reduce the number of recalculations
+        /// </summary>
+        private Int32 partsCache;
+
+        /// <summary>
+        /// Size of the part (depending on the part unit)
+        /// </summary>
+        private Int64 partSize;
+
+        /// <summary>
+        /// Operation mode to use
+        /// </summary>
+        private SplitUnit operationMode;
+
+        #endregion
+
+        #region Properties
+
         /// <summary>
         /// Getter for the part size in bytes
         /// </summary>
-        public Int64 PartSize { get; set; }
+        public Int64 PartSize {
+            get {
+                return partSize;
+            }
+            set {
+                if (value != partSize) {
+                    partsCache = 0;
+                    partSize = value;
+                }
+            }
+        }
 
         /// <summary>
         /// Filename to be split
@@ -129,9 +169,17 @@ namespace FileSplitter {
         /// <summary>
         /// Operation Mode
         /// </summary>
-        public SplitUnit OperationMode { get; set; }
-
-        private Int32 partsCache;
+        public SplitUnit OperationMode {
+            get {
+                return operationMode;
+            }
+            set {
+                if (value != operationMode) {
+                    partsCache = 0;
+                    operationMode = value;
+                }
+            }
+        }
 
         /// <summary>
         /// Calculates number of parts, based on size of file a part size
@@ -184,15 +232,9 @@ namespace FileSplitter {
         /// </summary>
         public String GenerationLogFile { get; set; }
 
-        /// <summary>
-        /// Adds the file name to the log file
-        /// </summary>
-        /// <param name="fileName"></param>
-        private void registerCreatedFile(String fileName) {
-            if (GenerationLogFile != null) {
-                File.AppendAllText(GenerationLogFile, fileName + Environment.NewLine);
-            }
-        }
+        #endregion
+
+        #region event helper functions 
 
         /// <summary>
         /// Launch splitStart event
@@ -236,6 +278,17 @@ namespace FileSplitter {
                 message(this, new MessageArgs(msg, parameters));
             }
         }
+        #endregion 
+
+        /// <summary>
+        /// Adds the file name to the log file
+        /// </summary>
+        /// <param name="fileName"></param>
+        private void registerCreatedFile(String fileName) {
+            if (GenerationLogFile != null) {
+                File.AppendAllText(GenerationLogFile, fileName + Environment.NewLine);
+            }
+        }
 
         /// <summary>
         /// Generates and registers next file name in the correct destination folder
@@ -268,7 +321,6 @@ namespace FileSplitter {
             return linesReaded;
         }
 
-
         /// <summary>
         /// Split file by number of lines
         /// </summary>
@@ -276,7 +328,6 @@ namespace FileSplitter {
         /// <param name="fileNameInfo"></param>
         /// <param name="sourceFileSize"></param>
         private void splitByLines(String inputFileName, Int64 sourceFileSize) {
-
 
             // File Pattern
             Int64 actualFileNumber = 1;
@@ -418,7 +469,6 @@ namespace FileSplitter {
             }
         }
 
-
         /// <summary>
         /// Do split operation
         /// </summary>
@@ -476,6 +526,9 @@ namespace FileSplitter {
                     if (!di.Exists) {
                         di.Create();
                     }
+                } else {
+                    //If destination not set use original file path
+                    DestinationFolder = Path.GetDirectoryName(this.FileName);
                 }
 
                 if (OperationMode != SplitUnit.Lines) {
