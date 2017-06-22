@@ -83,7 +83,12 @@ namespace FileSplitter {
         /// </summary>
         [STAThread]
         static void Main(String[] args) {
+
+        //Change console title with version only on debug testing executions
+#if DEBUG
             Console.Title = Application.ProductName +  " " + Application.ProductVersion + " Console Window";
+#endif
+
             CommandLine cmd = new CommandLine(); 
             if (args != null && args.Length > 1) {   
                 cmd.parseArguments(args);
