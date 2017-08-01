@@ -38,6 +38,7 @@ namespace FileSplitter {
         internal const string UnitMegaBytes = "mb";
         internal const string UnitGigaBytes = "gb";
         internal const string UnitLines = "l";
+        internal const string FileEncoding = "fe";
 
         /// <summary>
         /// Parameters collection
@@ -136,6 +137,12 @@ namespace FileSplitter {
             Console.WriteLine($" -{FormatParameterCmd} <format>  Use a custom format using pattern replacements");
             Console.WriteLine("               {0} the current part");
             Console.WriteLine("               {1} number of parts");
+            Console.WriteLine();
+            Console.WriteLine($" -{FileEncoding} <enc>  Use a custom encoding for split by lines.");
+            Console.WriteLine("               UTF-8-BOM to create the files as UTF-8 with byte order mark");
+            Console.WriteLine("               UTF-8-NOBOM to create the files as UTF-8 without byte order mark");
+            Console.WriteLine("               Other valid encoding to force the encoding for resulting files");
+            Console.WriteLine("               Do not set to use input file detected encondig");
             Console.WriteLine();
         }
     }

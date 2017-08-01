@@ -101,6 +101,7 @@ namespace FileSplitter {
                         // return an ErrorLevel in case it is processed in a Batch file
                         Environment.Exit(EXIT_CODE_FAIL );  
                     } else {
+
                         // check size
                         Int64 size = 0;
                         bool delete = false;
@@ -108,6 +109,7 @@ namespace FileSplitter {
                         SplitUnit mode = SplitUnit.Bytes;
                         string sizeParameter = splitParams[CommandLine.SizeParameterIndex];
                         string unitParameterLowered = args[CommandLine.UnitParameterIndex].ToLower();
+                        String encoding = null;
 
                         // Check size
                         if (!Int64.TryParse(sizeParameter, out size)) {
@@ -130,7 +132,11 @@ namespace FileSplitter {
                         if (cmd.hasKey(CommandLine.DeleteParameterCmd)) {
                             delete = true;
                         }
-                        
+
+                        if (cmd.hasKey(CommandLine.FileEncoding)) {
+                            encoding = cmd.getParamsOfKeyAsString(CommandLine.FileEncoding);
+                        }
+
                         Func<string, string, string> extractKeyWhenSet = (string parameter, string errorMessage) => {
                             string result = null;
                             if (cmd.hasKey(parameter)) {
@@ -169,6 +175,8 @@ namespace FileSplitter {
                             fs.DeleteOriginalFile = delete;
                             fs.DestinationFolder = destinationFolder;
                             fs.GenerationLogFile = outLogFile;
+                            fs.FileEncoding = encoding;
+
                             if (format != null) {
                                 fs.FileFormatPattern = format;
                             }
