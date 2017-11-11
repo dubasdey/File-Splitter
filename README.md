@@ -48,7 +48,9 @@ fsplit -split <size> <unit> <filePath> [-d] [-f <format>] [-df <folder>] [-lf <f
 ```
 
 Parameters:
-	
+* -h or -?
+	Shows usage help	
+
 * -split <size> <unit> <filePath>
 	* Splits the File into parts with this options
 		* size	
