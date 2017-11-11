@@ -35,6 +35,16 @@ from SourceForge.
 
 SourceForge downloads may not be up-to-date with the latest version of GitHub.
 
+## Languages
+-----------------------------------------------------------------------------------------
+The graphical interface uses the user desktop language if it is available.
+
+The current available languages are:
+- Spanish
+- English
+- French
+
+
 
 ## How To Use	
 -----------------------------------------------------------------------------------------
