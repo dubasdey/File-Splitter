@@ -38,6 +38,8 @@ namespace FileSplitter {
         internal const string UnitMegaBytes = "mb";
         internal const string UnitGigaBytes = "gb";
         internal const string UnitLines = "l";
+        internal const string HelpParameter = "?";
+        internal const string HelpParameterAlt = "h";
 
         /// <summary>
         /// Parameters collection

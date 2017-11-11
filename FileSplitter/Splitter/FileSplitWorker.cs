@@ -366,6 +366,7 @@ namespace FileSplitter {
         /// Split by size
         /// </summary>
         private void splitBySize(String inputFileName, Int64 sourceFileSize) {
+
             // Minimum Part Size allowed 4kb
             if (this.PartSize < MINIMUM_PART_SIZE) {
                 onMessage(ExceptionMessage.ERROR_MINIMUN_PART_SIZE, MINIMUM_PART_SIZE);
@@ -399,7 +400,7 @@ namespace FileSplitter {
             try {
                 stmWriter = File.Create(actualFileName);
             } catch {
-                onMessage(ExceptionMessage.ERROR_OPENING_FILE); //TODO new error message 
+                onMessage(ExceptionMessage.ERROR_CREATING_FILE);
                 throw new SplitFailedException();
             }
 
@@ -470,6 +471,47 @@ namespace FileSplitter {
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="originalFile"></param>
+        private void assertDriveSpace(String destination, Int64 requiredSize) {
+            // Check Space available
+            DirectoryInfo di = new DirectoryInfo(destination);
+            DriveInfo driveInfo = new DriveInfo(di.Root.Name);
+
+            if (driveInfo.DriveType == DriveType.Fixed || driveInfo.DriveType == DriveType.Removable) {
+
+                // Exception if not space available
+                if (driveInfo.AvailableFreeSpace <= requiredSize) {
+                    onMessage(ExceptionMessage.ERROR_NO_SPACE_TO_SPLIT);
+                    throw new SplitFailedException();
+                }
+
+                // Check Drive Format Limitations. Only for Fixed removable drives
+                // FAT16 2GB
+                // FAT32 4GB
+                // FAT12 4GB
+                if (driveInfo.DriveFormat == DriveFormat_FAT16) {
+                    if (this.PartSize > DriveFormat_FAT16_MaxAmount * DriveFormat_FAT16_Factor) {
+                        onMessage(ExceptionMessage.ERROR_FILESYSTEM_NOTALLOW_SIZE, DriveFormat_FAT16, DriveFormat_FAT16_MaxAmount, DriveFormat_FAT16_FactorName);
+                        throw new SplitFailedException();
+                    }
+                } else if (driveInfo.DriveFormat == DriveFormat_FAT32) {
+                    if (this.PartSize > DriveFormat_FAT32_MaxAmount * DriveFormat_FAT32_Factor) {
+                        onMessage(ExceptionMessage.ERROR_FILESYSTEM_NOTALLOW_SIZE, DriveFormat_FAT32, DriveFormat_FAT32_MaxAmount, DriveFormat_FAT32_FactorName);
+                        throw new SplitFailedException();
+                    }
+                } else if (driveInfo.DriveFormat == DriveFormat_FAT12) {
+                    if (this.PartSize > DriveFormat_FAT12_MaxAmount * DriveFormat_FAT12_Factor) {
+                        onMessage(ExceptionMessage.ERROR_FILESYSTEM_NOTALLOW_SIZE, DriveFormat_FAT12, DriveFormat_FAT12_MaxAmount, DriveFormat_FAT12_FactorName);
+                        throw new SplitFailedException();
+                    }
+                }
+            }
+        }
+
+
+        /// <summary>
         /// Do split operation
         /// </summary>
         public void doSplit() {
@@ -481,9 +523,6 @@ namespace FileSplitter {
                 onStart();
 
                 FileInfo fileNameInfo = new FileInfo(this.FileName);
-
-                // Check Space available
-                DriveInfo driveInfo = new DriveInfo(fileNameInfo.Directory.Root.Name);
                 Int64 sourceFileSize = fileNameInfo.Length;
 
                 // Builds default pattern if FileFormatPattern is null
@@ -491,33 +530,6 @@ namespace FileSplitter {
                     // Use the part's string length (e.g. '123' -> 3) to determine the amount of padding needed
                     String zeros = new String('0', this.Parts.ToString().Length); // Padding
                     FileFormatPattern = Path.GetFileNameWithoutExtension(this.FileName) + "_{0:" + zeros + "}({1:" + zeros + "})" + fileNameInfo.Extension;
-                }
-
-                // Exception if not space available
-                if (driveInfo.AvailableFreeSpace <= sourceFileSize) {
-                    onMessage(ExceptionMessage.ERROR_NO_SPACE_TO_SPLIT);
-                    throw new SplitFailedException();
-                }
-
-                // Check Drive Format Limitations
-                // FAT16 2GB
-                // FAT32 4GB
-                // FAT12 4GB
-                if (driveInfo.DriveFormat == DriveFormat_FAT16) { 
-                    if (this.PartSize > DriveFormat_FAT16_MaxAmount * DriveFormat_FAT16_Factor) {
-                        onMessage(ExceptionMessage.ERROR_FILESYSTEM_NOTALLOW_SIZE, DriveFormat_FAT16, DriveFormat_FAT16_MaxAmount, DriveFormat_FAT16_FactorName);
-                        throw new SplitFailedException();
-                    }
-                } else if (driveInfo.DriveFormat == DriveFormat_FAT32) { 
-                    if (this.PartSize > DriveFormat_FAT32_MaxAmount * DriveFormat_FAT32_Factor) {
-                        onMessage(ExceptionMessage.ERROR_FILESYSTEM_NOTALLOW_SIZE, DriveFormat_FAT32, DriveFormat_FAT32_MaxAmount, DriveFormat_FAT32_FactorName);
-                        throw new SplitFailedException();
-                    }
-                } else if (driveInfo.DriveFormat == DriveFormat_FAT12) {  
-                    if (this.PartSize > DriveFormat_FAT12_MaxAmount * DriveFormat_FAT12_Factor) {
-                        onMessage(ExceptionMessage.ERROR_FILESYSTEM_NOTALLOW_SIZE, DriveFormat_FAT12, DriveFormat_FAT12_MaxAmount, DriveFormat_FAT12_FactorName);
-                        throw new SplitFailedException();
-                    }
                 }
 
                 // Try create destination
@@ -530,6 +542,11 @@ namespace FileSplitter {
                     //If destination not set use original file path
                     DestinationFolder = Path.GetDirectoryName(this.FileName);
                 }
+
+
+                // Checks drive space to on destination
+                assertDriveSpace(DestinationFolder, sourceFileSize);
+
 
                 if (OperationMode != SplitUnit.Lines) {
                     splitBySize(this.FileName, sourceFileSize);

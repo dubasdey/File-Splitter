@@ -126,11 +126,14 @@
   <data name="CMB_LINES" xml:space="preserve">
     <value>Lines</value>
   </data>
+  <data name="ERROR_CREATING_FILE" xml:space="preserve">
+    <value>Error creating new splitted file {0}</value>
+  </data>
   <data name="ERROR_FILESYSTEM_NOTALLOW_SIZE" xml:space="preserve">
     <value>{0} File systems does not allow more than {1} {2} for each file.</value>
   </data>
   <data name="ERROR_MINIMUN_PART_SIZE" xml:space="preserve">
-    <value>Minimun part size must be {0} bytes</value>
+    <value>Minimum part size must be {0} bytes</value>
   </data>
   <data name="ERROR_NO_SPACE_TO_SPLIT" xml:space="preserve">
     <value>No Space available to split</value>

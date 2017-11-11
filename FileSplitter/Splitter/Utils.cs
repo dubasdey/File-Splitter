@@ -99,8 +99,7 @@ namespace FileSplitter {
             switch (msg) {
                 case ExceptionMessage.ERROR_NO_SPACE_TO_SPLIT:
                 case ExceptionMessage.ERROR_OPENING_FILE:
-                    icon = MessageBoxIcon.Hand;
-                    break;
+                case ExceptionMessage.ERROR_CREATING_FILE:
                 case ExceptionMessage.ERROR_FILESYSTEM_NOTALLOW_SIZE:
                 case ExceptionMessage.ERROR_MINIMUN_PART_SIZE:
                 case ExceptionMessage.ERROR_TOTALSIZE_NOTEQUALS:

@@ -48,6 +48,11 @@ namespace FileSplitter.Enums {
         /// <summary>
         /// File system not capable to get files of that size
         /// </summary>
-        ERROR_FILESYSTEM_NOTALLOW_SIZE
+        ERROR_FILESYSTEM_NOTALLOW_SIZE,
+
+        /// <summary>
+        /// Error creating a new splitted file
+        /// </summary>
+        ERROR_CREATING_FILE
     }
 }

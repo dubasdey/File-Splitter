@@ -85,9 +85,16 @@ namespace FileSplitter {
         static void Main(String[] args) {
             Console.Title = Application.ProductName +  " " + Application.ProductVersion + " Console Window";
             CommandLine cmd = new CommandLine(); 
-            if (args != null && args.Length > 1) {   
+            if (args != null && args.Length > 0) {   
                 cmd.parseArguments(args);
-                if (cmd.hasKey(global::FileSplitter.CommandLine.SplitParameterCmd)) {
+
+                // Print help and exit
+                if (cmd.hasKey(global::FileSplitter.CommandLine.HelpParameter) || cmd.hasKey(global::FileSplitter.CommandLine.HelpParameterAlt)) {
+                    cmd.printUsageHelp();
+                    Environment.Exit(EXIT_CODE_OK);
+                
+                // Split
+                } else if (cmd.hasKey(global::FileSplitter.CommandLine.SplitParameterCmd)) {
                     List<string> splitParams = cmd.getParamsOfKey(CommandLine.SplitParameterCmd);
                     if (splitParams.Count < 3) {
                         Console.WriteLine("Missing parameter");
@@ -146,7 +153,6 @@ namespace FileSplitter {
                         // Check destination Folder
                         destinationFolder = extractKeyWhenSet(CommandLine.DestinationFolderParameterCmd, "Invalid destination");
                        
-                        
                         // Check file to save names
                         outLogFile = extractKeyWhenSet(CommandLine.LogFileParameterCmd, "Invalid file");
                         

@@ -88,6 +88,15 @@ namespace FileSplitter.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error creating new splitted file {0}.
+        /// </summary>
+        internal static string ERROR_CREATING_FILE {
+            get {
+                return ResourceManager.GetString("ERROR_CREATING_FILE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} File systems does not allow more than {1} {2} for each file..
         /// </summary>
         internal static string ERROR_FILESYSTEM_NOTALLOW_SIZE {
@@ -97,7 +106,7 @@ namespace FileSplitter.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Minimun part size must be {0} bytes.
+        ///   Looks up a localized string similar to Minimum part size must be {0} bytes.
         /// </summary>
         internal static string ERROR_MINIMUN_PART_SIZE {
             get {

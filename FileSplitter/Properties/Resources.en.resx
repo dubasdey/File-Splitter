@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ERROR_TOTALSIZE_NOTEQUALS" xml:space="preserve">
     <value>The total size of all the output file parts is not equal to the original data file size !</value>
@@ -136,7 +136,7 @@
     <value>No Space available to split</value>
   </data>
   <data name="ERROR_MINIMUN_PART_SIZE" xml:space="preserve">
-    <value>Minimun part size must be {0} bytes</value>
+    <value>Minimum part size must be {0} bytes</value>
   </data>
   <data name="CMB_LINES" xml:space="preserve">
     <value>Lines</value>
@@ -170,5 +170,8 @@
   </data>
   <data name="ERROR_FILESYSTEM_NOTALLOW_SIZE" xml:space="preserve">
     <value>{0} File systems does not allow more than {1} {2} for each file.</value>
+  </data>
+  <data name="ERROR_CREATING_FILE" xml:space="preserve">
+    <value>Error creating new splitted file {0}</value>
   </data>
 </root>
