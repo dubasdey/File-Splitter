@@ -167,6 +167,11 @@ namespace FileSplitter {
         public String FileName { get; set; }
 
         /// <summary>
+        /// Encoding to be used as String
+        /// </summary>
+        public String FileEncoding { get; set; }
+
+        /// <summary>
         /// Operation Mode
         /// </summary>
         public SplitUnit OperationMode {
@@ -280,6 +285,24 @@ namespace FileSplitter {
         }
         #endregion 
 
+
+        private Encoding getEncoding(StreamReader originalFile) {
+            Encoding resultEncoding = Encoding.Default;
+            if (FileEncoding != null) {
+                if ("UTF-8-BOM".Equals(FileEncoding)) {
+                    resultEncoding = new UTF8Encoding(true, false);
+                } else if ("UTF-8-NOBOM".Equals(FileEncoding)) {
+                    resultEncoding = new UTF8Encoding(false, false);
+                } else {
+                    //TODO: Check if use Encoder/Decoder Fallback
+                    resultEncoding = Encoding.GetEncoding(FileEncoding);
+                }
+            } else {
+                resultEncoding = originalFile.CurrentEncoding;
+            }
+            return resultEncoding;
+        }
+
         /// <summary>
         /// Adds the file name to the log file
         /// </summary>
@@ -335,7 +358,7 @@ namespace FileSplitter {
 
             // Error if cant create new file
             StreamReader inputReader = new StreamReader(inputFileName, true);
-            Encoding enc = inputReader.CurrentEncoding;
+            Encoding enc = getEncoding(inputReader);
             StreamWriter outputWriter = new StreamWriter(actualFileName, false, enc, BUFFER_SIZE_BIG);
 
             Int32 linesReaded = 0;
@@ -363,8 +386,10 @@ namespace FileSplitter {
         }
 
         /// <summary>
-        /// Split by size
+        /// Split File by size
         /// </summary>
+        /// <param name="inputFileName">File name to split</param>
+        /// <param name="sourceFileSize">Original file size</param>
         private void splitBySize(String inputFileName, Int64 sourceFileSize) {
 
             // Minimum Part Size allowed 4kb

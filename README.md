@@ -80,6 +80,10 @@ Parameters:
 		* Changes the result folder from current folder to the desired folder. The folder is created if not exists.
 	* -lf <file>
 		* Creates a file with the names of all the generated files 
+    * -fe <enc>
+	    * Changes the resulting file encoding. Use any valid encodig name or UTF-8-BOM to force UTF-8 
+		with byte mark order or UTF-8-NOBOM to force UTF-8 file without byte mark order.
+		This flag is only used when splitting by lines. Split by size produces binary files.
 
 
 Example: 

@@ -1,6 +1,10 @@
 ﻿FileSplitter Changelog
 ===============================================================
 
+FileSplitter 1.4.0 2017-**-**
+-------------------------------------------------------------
+
+
 FileSplitter 1.4.0 2017-11-11
 -------------------------------------------------------------
 NEW: New message on failed creating new file
@@ -8,6 +12,11 @@ NEW: Added French language
 FIXED: #23 Free space verification invalid
 FIXED: #22 No space to split
 FIXED: #21 -? could show usage ; closing cmd
+FIXED: #17 Puts garbage characters into split files (Tested)
+
+FileSplitter 1.4.0 2017-08-01
+-------------------------------------------------------------
+FIXED: #20 Changes CMD Title
 FIXED: #17 Puts garbage characters into split files
 
 FileSplitter 1.4.0 2017-05-20
