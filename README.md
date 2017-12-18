@@ -27,13 +27,31 @@ example:
 	console_2(3).log
 	console_3(3).log
 
-## Download
+## Installation
+-----------------------------------------------------------------------------------------
+
+### 1.- Requirements
+-----------------------------------------------------------------------------------------
+
+_.NET Framework 3.5_ or newer version is required to execute this tool if is not preinstalled with your OS
+
+Windows 7, 8 and 10 contains a valid .NET Framework already installed. For previous Windows releases 
+please go to microsoft update site and installa a valid .NET Framework
+
+### 2.- Download
 -----------------------------------------------------------------------------------------
 
 Download the last release from [GitHub Relases](https://github.com/dubasdey/File-Splitter/releases) or 
 from SourceForge. 
 
 SourceForge downloads may not be up-to-date with the latest version of GitHub.
+
+### 3.- Install
+-----------------------------------------------------------------------------------------
+
+This tool only required to download and unzip the content to use the executable inside. No installer
+is provided
+
 
 ## Languages
 -----------------------------------------------------------------------------------------
