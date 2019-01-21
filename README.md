@@ -89,7 +89,8 @@ Parameters:
 				* 'kb' Kilobytes 
 				* 'mb' Megabytes 
 				* 'gb' Gigabytes 
-				* 'l' number of lines
+				* 'l'  number of lines (usig OS line end detection)
+				* 'f'  number of files (Splits file size rouding up and use the result as 'bytes' size split)
 		* filePath	
 			* Path of file to be split ex: "C:\console\console.log"
 	* -d 
