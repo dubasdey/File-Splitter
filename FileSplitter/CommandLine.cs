@@ -38,6 +38,7 @@ namespace FileSplitter {
         internal const string UnitMegaBytes = "mb";
         internal const string UnitGigaBytes = "gb";
         internal const string UnitLines = "l";
+        internal const string UnitFiles = "f";
         internal const string HelpParameter = "?";
         internal const string HelpParameterAlt = "h";
         internal const string FileEncoding = "fe";
@@ -126,6 +127,7 @@ namespace FileSplitter {
             Console.WriteLine($"                {UnitMegaBytes} - megabytes");
             Console.WriteLine($"                {UnitGigaBytes} - gigabytes");
             Console.WriteLine($"                {UnitLines}  - lines (based on endline detection)");
+            Console.WriteLine($"                {UnitFiles}  - Files (Adjust size to get the dired files)");
             Console.WriteLine();
             Console.WriteLine("  filePath    Path of the file to be split.");
             Console.WriteLine();

@@ -127,7 +127,7 @@ namespace FileSplitter {
         #region Private variables 
 
         /// <summary>
-        /// Stores the numbers of partes calculated if the partSize o unit is not changed
+        /// Stores the numbers of parts calculated if the partSize o unit is not changed
         /// to reduce the number of recalculations
         /// </summary>
         private Int32 partsCache;
@@ -568,12 +568,16 @@ namespace FileSplitter {
                     DestinationFolder = Path.GetDirectoryName(this.FileName);
                 }
 
-
                 // Checks drive space to on destination
                 assertDriveSpace(DestinationFolder, sourceFileSize);
 
-
-                if (OperationMode != SplitUnit.Lines) {
+                // If file split is by files change to size bytes calculated
+                // based on source file size
+                if (operationMode == SplitUnit.Files){
+                    partSize = Math.Ceiling(sourceFileSize/partSize);
+                    operationMode = SplitUnit.Bytes;
+                    splitBySize(this.FileName, sourceFileSize);
+                } else if (OperationMode != SplitUnit.Lines) {
                     splitBySize(this.FileName, sourceFileSize);
                 } else {
                     splitByLines(this.FileName, sourceFileSize);

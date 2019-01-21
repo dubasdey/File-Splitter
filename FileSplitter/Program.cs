@@ -106,7 +106,7 @@ namespace FileSplitter {
                         cmd.printUsageHelp();
 
                         // return an ErrorLevel in case it is processed in a Batch file
-                        Environment.Exit(EXIT_CODE_FAIL );  
+                        Environment.Exit(EXIT_CODE_FAIL);  
                     } else {
 
                         // check size

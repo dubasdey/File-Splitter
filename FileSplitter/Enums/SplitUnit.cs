@@ -35,7 +35,11 @@ namespace FileSplitter.Enums {
         MegaBytes,
         [UnitAttribute(CommandLine.UnitGigaBytes, 3)]
         GigaBytes,
+
         [UnitAttribute(CommandLine.UnitLines, 0)]
-        Lines
+        Lines,
+
+        [UnitAttribute(CommandLine.UnitFiles, 0)]
+        Files
     }
 }
