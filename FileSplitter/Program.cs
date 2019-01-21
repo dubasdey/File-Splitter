@@ -90,8 +90,19 @@ namespace FileSplitter {
 #endif
 
             CommandLine cmd = new CommandLine(); 
-            if (args != null && args.Length > 0) {   
-                cmd.parseArguments(args);
+            if (args != null && args.Length > 0) {
+
+                if(!args[0].StartsWith("-") 
+                        && (args.Length == 4 || (args.Length>4 && args[4].StartsWith("-")))){
+                    // Add split as default
+                    String[] params = new String[args.Length+1];
+                    params[0] = "-split";
+                    for(int i=0; i<args.Length; i++){
+                        params[++i] = args[i];
+                    }
+                }else{
+                    cmd.parseArguments(args);
+                }
 
                 // Print help and exit
                 if (cmd.hasKey(global::FileSplitter.CommandLine.HelpParameter) || cmd.hasKey(global::FileSplitter.CommandLine.HelpParameterAlt)) {
@@ -208,7 +219,6 @@ namespace FileSplitter {
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
                 Application.Run(new FrmSplitter());
-
                 Environment.Exit(EXIT_CODE_OK);
             }
         }
