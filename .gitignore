@@ -6,3 +6,4 @@
 FileSplitter/Test/**/*.txt
 FileSplitter/FileSplitter.csproj.user
 .project
+*.user
