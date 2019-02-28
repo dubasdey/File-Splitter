@@ -574,7 +574,7 @@ namespace FileSplitter {
                 // If file split is by files change to size bytes calculated
                 // based on source file size
                 if (operationMode == SplitUnit.Files){
-                    partSize = Math.Ceiling(sourceFileSize/partSize);
+                    partSize = (long)Math.Ceiling((double)(sourceFileSize/partSize));
                     operationMode = SplitUnit.Bytes;
                     splitBySize(this.FileName, sourceFileSize);
                 } else if (OperationMode != SplitUnit.Lines) {
