@@ -95,10 +95,10 @@ namespace FileSplitter {
                 if(!args[0].StartsWith("-") 
                         && (args.Length == 4 || (args.Length>4 && args[4].StartsWith("-")))){
                     // Add split as default
-                    String[] params = new String[args.Length+1];
-                    params[0] = "-split";
+                    String[] parameters = new String[args.Length+1];
+                    parameters[0] = "-split";
                     for(int i=0; i<args.Length; i++){
-                        params[++i] = args[i];
+                        parameters[++i] = args[i];
                     }
                 }else{
                     cmd.parseArguments(args);
