@@ -160,7 +160,7 @@
     <value>All files progress</value>
   </data>
   <data name="ACTUAL_FILE_PROGRESS" xml:space="preserve">
-    <value>Actual file progress</value>
+    <value>Current file progress</value>
   </data>
   <data name="SPLINT_INFO_PARTS_DEF" xml:space="preserve">
     <value>0 parts of</value>
