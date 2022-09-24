@@ -21,5 +21,6 @@
         <ApplicationIcon>app.ico</ApplicationIcon>
         <AssemblyOriginatorKeyFile>FileSplitter.pfx</AssemblyOriginatorKeyFile>
         <StartupObject>FileSplitter.Program</StartupObject>
+        <EnableWindowsTargeting>true</EnableWindowsTargeting>
     </PropertyGroup>
 </Project>
