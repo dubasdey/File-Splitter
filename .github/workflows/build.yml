@@ -6,6 +6,9 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+    env:
+        DOTNET_NOLOGO: true
+        DOTNET_CLI_TELEMETRY_OPTOUT: true
     strategy:
       matrix:
         dotnet-version: ['6.0.x']
@@ -22,11 +25,8 @@ jobs:
         run: dotnet restore FileSplitter/FileSplitter.csproj
 
       - name: Build
-        run: |
-            cd FileSplitter
-            dotnet build FileSplitter.csproj --configuration Release --no-restore -v detailed -ds
-            cd ..
-        
+        run: dotnet build FileSplitter/FileSplitter.csproj --configuration Release --no-restore -v detailed -ds
+
       - name: Install Test dependencies
         run: dotnet restore FileSplitter.Tests/FileSplitter.Tests.csproj        
 
