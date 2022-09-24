@@ -113,7 +113,7 @@ namespace FileSplitter {
                         SplitUnit mode = SplitUnit.Bytes;
                         string sizeParameter = splitParams[CommandLine.SizeParameterIndex];
                         string unitParameterLowered = args[CommandLine.UnitParameterIndex].ToLower();
-                        String encoding = null;
+                        String? encoding = null;
 
                         // Check size
                         if (!Int64.TryParse(sizeParameter, out size)) {
@@ -141,8 +141,8 @@ namespace FileSplitter {
                             encoding = cmd.getParamsOfKeyAsString(CommandLine.FileEncoding);
                         }
 
-                        Func<string, string, string> extractKeyWhenSet = (string parameter, string errorMessage) => {
-                            string result = null;
+                        Func<string, string, string>? extractKeyWhenSet = (string parameter, string errorMessage) => {
+                            string result = "";
                             if (cmd.hasKey(parameter)) {
                                 if (cmd.hasParams(parameter)) {
                                     result = cmd.getParamsOfKeyAsString(parameter);
@@ -178,7 +178,7 @@ namespace FileSplitter {
                             fs.DeleteOriginalFile = delete;
                             fs.DestinationFolder = destinationFolder;
                             fs.GenerationLogFile = outLogFile;
-                            fs.FileEncoding = encoding;
+                            fs.FileEncoding = (encoding!=null?encoding:"UTF-8");
 
                             if (format != null) {
                                 fs.FileFormatPattern = format;

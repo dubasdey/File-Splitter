@@ -67,9 +67,9 @@ namespace FileSplitter.Attributes {
         /// <param name="identifier">The identifier field of the attribute to retireve</param>
         /// <returns>an enum value with the specified identifier</returns>
         /// <created>Nick</created>
-        public static T Parse<T>(string identifier) {
+        public static T? Parse<T>(string identifier) {
             Type type = typeof(T);
-            UnitAttribute toTest;
+            UnitAttribute? toTest;
             // Enumerate all public static fields
             foreach (var field in type.GetFields(BindingFlags.Public | BindingFlags.Static)) {
                 // Check each attribute
@@ -79,8 +79,10 @@ namespace FileSplitter.Attributes {
                     // And verify that 
                     if (attributeType == typeof(UnitAttribute)) {
                         toTest = attribute as UnitAttribute;
-                        if (toTest.Identifier == identifier) {
-                            return (T)field.GetValue(null);
+                        if (toTest!.Identifier == identifier) {
+                            #pragma warning disable CS8600
+                            return (T)field!.GetValue(null);
+                            #pragma warning restore CS8600
                         }
                     }
                 }
@@ -95,24 +97,26 @@ namespace FileSplitter.Attributes {
         /// <param name="value">The enum value to get the attribute off of</param>
         /// <returns>the attribute (if available) that was set on an enum field</returns>
         /// <created>Nick</created>
-        public static UnitAttribute GetFromField<T>(T value) {
+        public static UnitAttribute GetFromField<T>(T? value) {
             Type type = typeof(T);
-            string enumPropertyNameToTest = value.ToString();
+            string? enumPropertyNameToTest = value!.ToString();
             // Enumerate all public static fields
             foreach (var field in type.GetFields(BindingFlags.Public | BindingFlags.Static)) {
-                if (field.Name == enumPropertyNameToTest) {
+                if (field!.Name == enumPropertyNameToTest) {
                     // Check each attribute
                     foreach (var attribute in field.GetCustomAttributes(false)) {
                         // Get the type of the attribute
                         Type attributeType = attribute.GetType();
                         // And verify that 
-                        if (attributeType == typeof(UnitAttribute)) {
+                        #pragma warning disable CS8603
+                        if (attribute!=null && attributeType == typeof(UnitAttribute)) {
                             return attribute as UnitAttribute;
                         }
+                        #pragma warning restore CS8603
                     }
                 }
             }
-            return null;
+            return new UnitAttribute("byte",1);
         }
     }
 }

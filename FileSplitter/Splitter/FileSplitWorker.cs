@@ -105,22 +105,22 @@ namespace FileSplitter {
         /// <summary>
         /// Spliter Start event
         /// </summary>
-        public event StartHandler start;
+        public event StartHandler? start;
 
         /// <summary>
         /// Splitern End event
         /// </summary>
-        public event FinishHandler finish;
+        public event FinishHandler? finish;
 
         /// <summary>
         /// Splitter process event
         /// </summary>
-        public event ProcessHandler processing;
+        public event ProcessHandler? processing;
 
         /// <summary>
         /// Splitter messages event
         /// </summary>
-        public event MessageHandler message;
+        public event MessageHandler? message;
 
         #endregion
 
@@ -164,12 +164,12 @@ namespace FileSplitter {
         /// <summary>
         /// Filename to be split
         /// </summary>
-        public String FileName { get; set; }
+        public String FileName { get; set; }="";
 
         /// <summary>
         /// Encoding to be used as String
         /// </summary>
-        public String FileEncoding { get; set; }
+        public String FileEncoding { get; set; } = "UTF-8";
 
         /// <summary>
         /// Operation Mode
@@ -220,22 +220,22 @@ namespace FileSplitter {
         /// {0} for current file number
         /// {1} for total files
         /// </summary>
-        public String FileFormatPattern { get; set; }
+        public String FileFormatPattern { get; set; } ="result-{0}-of-{1}.txt";
 
         /// <summary>
         /// Delete original file if end is correct
         /// </summary>
-        public Boolean DeleteOriginalFile { get; set; }
+        public Boolean DeleteOriginalFile { get; set; } = false;
 
         /// <summary>
         /// Destination folder. If different to current folder
         /// </summary>
-        public String DestinationFolder { get; set; }
+        public String ?DestinationFolder { get; set; }
 
         /// <summary>
         /// File used to store generated file names
         /// </summary>
-        public String GenerationLogFile { get; set; }
+        public String? GenerationLogFile { get; set; }
 
         #endregion
 
@@ -335,7 +335,7 @@ namespace FileSplitter {
         private Int64 getNumberOfLines(String inputFileName) {
             StreamReader inputReader = new StreamReader(inputFileName, true);
             Int64 linesReaded = 0;
-            String line = "";
+            String? line = "";
             do {
                 line = inputReader.ReadLine();
                 linesReaded++;
@@ -362,7 +362,7 @@ namespace FileSplitter {
             StreamWriter outputWriter = new StreamWriter(actualFileName, false, enc, BUFFER_SIZE_BIG);
 
             Int32 linesReaded = 0;
-            String line = "";
+            String? line = "";
             do {
                 line = inputReader.ReadLine();
                 if (line != null) {
@@ -412,8 +412,8 @@ namespace FileSplitter {
             String actualFileName = getNextFileName(actualFileNumber);
 
             // Check if file can be opened for read
-            FileStream stmOriginal = null;
-            FileStream stmWriter = null;
+            FileStream? stmOriginal = null;
+            FileStream? stmWriter = null;
             try {
                 stmOriginal = File.OpenRead(this.FileName);
             } catch {
@@ -569,8 +569,10 @@ namespace FileSplitter {
                 }
 
                 // Checks drive space to on destination
-                assertDriveSpace(DestinationFolder, sourceFileSize);
-
+                if(DestinationFolder!=null){
+                    assertDriveSpace(DestinationFolder, sourceFileSize);
+                }
+                
                 // If file split is by files change to size bytes calculated
                 // based on source file size
                 if (operationMode == SplitUnit.Files){
