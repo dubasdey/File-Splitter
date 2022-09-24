@@ -13,7 +13,6 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
 
 using FileSplitter;
@@ -25,7 +24,6 @@ namespace FileSplitterTest {
     /// <summary>
     /// Split Test
     /// </summary>
-    [TestClass]
     public class SplitBySizeTest {
 
         /// <summary>
@@ -54,14 +52,11 @@ namespace FileSplitterTest {
             worker.doSplit();
         }
 
-        [TestMethod]
+        [Fact]
         public void test1() {
             Debug.WriteLine("Split 2 MB File");
             sizeTest(SplitUnit.MegaBytes, 2);
-
-
         }
-
 
     }
 }

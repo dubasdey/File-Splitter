@@ -16,9 +16,11 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using System.IO;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using FileSplitter.Attributes;
 using FileSplitter.Enums;
+
 
 namespace FileSplitter {
 
@@ -38,15 +40,6 @@ namespace FileSplitter {
 		private static Int32 EXIT_CODE_FAIL= 1;
 		
         /// <summary>
-        /// Call to User32.dll Search for window
-        /// </summary>
-        /// <param name="lpClassName"></param>
-        /// <param name="lpWindowName"></param>
-        /// <returns></returns>
-        [DllImport("user32.dll")]
-        public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
-
-        /// <summary>
         /// Call to user32.ddl allow to show or hide a window
         /// </summary>
         /// <param name="hWnd"></param>
@@ -65,7 +58,7 @@ namespace FileSplitter {
         /// </summary>
         /// <param name="visible"></param>
         private static void setConsoleWindowVisibility(bool visible) {
-            IntPtr hWnd = FindWindow(null, Console.Title);
+            IntPtr hWnd = Process.GetCurrentProcess().MainWindowHandle;
             if (hWnd != IntPtr.Zero) {
                 if (!visible) {
                     //Hide the window                    
@@ -77,18 +70,11 @@ namespace FileSplitter {
             }
         }
 
-
         /// <summary>
         /// Application entry Point 
         /// </summary>
         [STAThread]
         static void Main(String[] args) {
-
-        //Change console title with version only on debug testing executions
-#if DEBUG
-            Console.Title = Application.ProductName +  " " + Application.ProductVersion + " Console Window";
-#endif
-
             CommandLine cmd = new CommandLine(); 
             if (args != null && args.Length > 0) {
 
