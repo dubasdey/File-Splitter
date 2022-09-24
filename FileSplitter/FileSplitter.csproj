@@ -22,5 +22,6 @@
         <AssemblyOriginatorKeyFile>FileSplitter.pfx</AssemblyOriginatorKeyFile>
         <StartupObject>FileSplitter.Program</StartupObject>
         <EnableWindowsTargeting>true</EnableWindowsTargeting>
+        <NuGetPackageImportStamp></NuGetPackageImportStamp>
     </PropertyGroup>
 </Project>

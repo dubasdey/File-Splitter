@@ -5,8 +5,8 @@
     <EnableWindowsTargeting>true</EnableWindowsTargeting>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-
     <IsPackable>false</IsPackable>
+    <NuGetPackageImportStamp></NuGetPackageImportStamp>
   </PropertyGroup>
 
   <ItemGroup>
