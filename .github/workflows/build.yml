@@ -22,10 +22,10 @@ jobs:
         run: dotnet restore FileSplitter/FileSplitter.csproj
 
       - name: Build
-        run: dotnet build FileSplitter/FileSplitter.csproj --configuration Release --no-restore
+        run: dotnet build FileSplitter/FileSplitter.csproj --configuration Release --no-restore -v detailed -ds
         
       - name: Install Test dependencies
         run: dotnet restore FileSplitter.Tests/FileSplitter.Tests.csproj        
 
       - name: Test
-        run: dotnet test FileSplitter.Tests/FileSplitter.Tests.csproj --no-restore --verbosity normal
+        run: dotnet test FileSplitter.Tests/FileSplitter.Tests.csproj --no-restore -v detailed -ds
