@@ -12,10 +12,7 @@
         <Platform>Any CPU</Platform>
         <BuildDir>bin</BuildDir>
         <OutputType>exe</OutputType>
-        
-        <TargetFramework Condition=" '$(dotnet-version)' == '5.0.x' ">net5.0-windows</TargetFramework>
-        <TargetFramework Condition=" '$(dotnet-version)' == '' ">net6.0-windows</TargetFramework>
-
+        <TargetFramework>net6.0-windows</TargetFramework>
         <Nullable>enable</Nullable>
         <UseWindowsForms>true</UseWindowsForms>
         <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
@@ -23,7 +20,7 @@
         <AssemblyName>FileSplitter</AssemblyName>
         <ApplicationIcon>app.ico</ApplicationIcon>
         <AssemblyOriginatorKeyFile>FileSplitter.pfx</AssemblyOriginatorKeyFile>
-        <StartupObject>Program</StartupObject>
+        <StartupObject></StartupObject>
         <EnableWindowsTargeting>true</EnableWindowsTargeting>
         <NuGetPackageImportStamp></NuGetPackageImportStamp>
     </PropertyGroup>

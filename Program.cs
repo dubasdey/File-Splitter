@@ -22,9 +22,6 @@ using FileSplitter.Attributes;
 using FileSplitter.Enums;
 using FileSplitter;
 
-
-
-
 /// <summary>
 /// Program start
 /// </summary>
