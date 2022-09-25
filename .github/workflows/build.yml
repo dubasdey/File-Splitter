@@ -26,6 +26,7 @@ jobs:
         run: dotnet restore FileSplitter.csproj -p:dotnet-version=${dotnet-version}
         with:
           dotnet-version: ${{ matrix.dotnet-version }}
+
       - name: Build
         run: dotnet build FileSplitter.csproj --configuration Release --no-restore -v detailed -ds -p:dotnet-version=${dotnet-version}
         with:
@@ -35,7 +36,8 @@ jobs:
         run: dotnet restore FileSplitter.Tests.csproj -p:dotnet-version=${dotnet-version}
         with:
           dotnet-version: ${{ matrix.dotnet-version }}
+
       - name: Test
         run: dotnet test FileSplitter.Tests.csproj --no-restore -v detailed -ds -p:dotnet-version=${dotnet-version}
-                with:
+        with:
           dotnet-version: ${{ matrix.dotnet-version }}
