@@ -6,6 +6,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <EnableDefaultEmbeddedResourceItems>false</EnableDefaultEmbeddedResourceItems>    
     <NuGetPackageImportStamp></NuGetPackageImportStamp>
   </PropertyGroup>
 
@@ -23,7 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FileSplitter\FileSplitter.csproj" />
+    <ProjectReference Include=".\FileSplitter.csproj" />
   </ItemGroup>
 
 </Project>
