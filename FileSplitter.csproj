@@ -23,5 +23,6 @@
         <StartupObject></StartupObject>
         <EnableWindowsTargeting>true</EnableWindowsTargeting>
         <NuGetPackageImportStamp></NuGetPackageImportStamp>
+        <ImplicitUsings>disable</ImplicitUsings>
     </PropertyGroup>
 </Project>
