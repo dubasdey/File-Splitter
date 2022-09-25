@@ -23,13 +23,19 @@ jobs:
           dotnet-version: ${{ matrix.dotnet-version }}
 
       - name: Install dependencies
-        run: dotnet restore FileSplitter.csproj
-
+        run: dotnet restore FileSplitter.csproj -p:dotnet-version=${dotnet-version}
+        with:
+          dotnet-version: ${{ matrix.dotnet-version }}
       - name: Build
-        run: dotnet build FileSplitter.csproj --configuration Release --no-restore -v detailed -ds
+        run: dotnet build FileSplitter.csproj --configuration Release --no-restore -v detailed -ds -p:dotnet-version=${dotnet-version}
+        with:
+          dotnet-version: ${{ matrix.dotnet-version }}
 
       - name: Install Test dependencies
-        run: dotnet restore FileSplitter.Tests.csproj
-
+        run: dotnet restore FileSplitter.Tests.csproj -p:dotnet-version=${dotnet-version}
+        with:
+          dotnet-version: ${{ matrix.dotnet-version }}
       - name: Test
-        run: dotnet test FileSplitter.Tests.csproj --no-restore -v detailed -ds
+        run: dotnet test FileSplitter.Tests.csproj --no-restore -v detailed -ds -p:dotnet-version=${dotnet-version}
+                with:
+          dotnet-version: ${{ matrix.dotnet-version }}
